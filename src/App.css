@@ -1,0 +1,171 @@
+:root {
+  font-size: 16px;
+  font-family: 'Open Sans';
+  --text-primary: #b6b6b6;
+  --text-secondary: #ececec;
+  --bg-primary: #23232e;
+  --bg-secondary: #141418;
+  --transition-speed: 600ms;
+}
+
+body {
+  color: black;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+body::-webkit-scrollbar {
+  width: 0.25rem;
+}
+body::-webkit-scrollbar-track {
+  background: #1e1e24;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #6649b8;
+}
+
+main {
+  margin-left: 5rem;
+  padding: 1rem;
+}
+
+.App {
+  text-align: center;
+}
+ 
+.App-header {
+  background-color: #282c34;
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  padding-top:10px;
+  color: white;
+}
+
+ .navlinks{
+   color: rgb(27, 27, 27);
+ }
+
+main {
+  margin-left: 5rem;
+  padding: 1rem;
+}
+
+.TopRow{
+  margin-top: 10px;
+  
+}
+
+.SudokBtn{
+  height: 50px;
+  width: 50px;
+  color:rgb(105, 107, 102);
+  font-size: 16px;
+  margin-right:2px;
+  background-color: white;
+  border: 1px solid rgb(200, 216, 200);
+  vertical-align: bottom;
+}
+
+.SudokBtn:hover{
+  border:2px solid green;
+  color: green;
+}
+
+.SudokuDisBtn{
+  height: 50px;
+  width: 50px;
+  color:rgb(134, 134, 132);
+  font-size: 16px;
+  margin-right:2px;
+  background-color: rgb(233, 233, 233);
+  border: 1px solid rgb(158, 161, 158);
+  vertical-align: bottom;
+}
+
+
+.inputBtn{
+  height: 35px;
+  width: 45px;
+  color:rgb(44, 81, 148);
+  font-size: 15px;
+  margin-right:1 px;
+  background-color: rgb(235, 235, 235);
+  border: none;
+  vertical-align: bottom;
+}
+
+.inputBtn:hover{
+  color:rgb(27, 50, 92);
+  font-size: 14px;
+  background-color: rgb(255, 255, 255);
+}
+
+.TopRow p{
+  margin:2px;
+}
+
+.inarow{
+  display:block;
+  margin:2px;
+}
+
+.renderSq{
+  display:inline;
+}
+
+.downbtnrow{
+  display:inline;
+  padding-top: 20px;;
+}
+
+.rpad{
+  margin-right: 5px;
+}
+
+.bpad{
+  margin-bottom: 3px;
+}
+
+.MenuBtn{
+  height: 30px;
+  width: 70px;
+  color:rgb(74, 76, 77);
+  font-size: 16px;
+  margin-right:10px;
+  margin-top:10px;
+  background-color: rgb(241, 226, 202);
+  border: none;
+  vertical-align: bottom;
+}
+
+.MenuBtn:hover{
+  border:2px solid rgb(241, 181, 52);
+  color: rgb(83, 39, 3);
+}
+
+.RedBtn{
+  background-color: lightcoral;
+}
+
+.SelectOption{
+  margin-top:10px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  min-width: 40px;
+}
+
+ 
+ 
+
+.link-text {
+  display: none;
+  margin-left: 1rem;
+}
+ 
+ 
+ 
