@@ -119,8 +119,8 @@ main {
 }
 
 .downbtnrow{
-  display:inline;
-  padding-top: 20px;;
+  justify-content: space-between;
+  padding-top: 10px;;
 }
 
 .rpad{
@@ -131,6 +131,9 @@ main {
   margin-bottom: 3px;
 }
 
+.menubtn1{
+  margin-right:10px;
+}
 .MenuBtn{
   height: 30px;
   width: 70px;
@@ -159,13 +162,11 @@ main {
   min-width: 40px;
 }
 
- 
- 
-
 .link-text {
   display: none;
   margin-left: 1rem;
 }
  
- 
- 
+.primaryModal{
+  width:10px;
+}

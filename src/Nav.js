@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import {Link} from 'react-router-dom';
 import  Nav from 'react-bootstrap/Nav';
 
  /***************
@@ -11,10 +10,10 @@ import  Nav from 'react-bootstrap/Nav';
 
 function Navin() {
   return (
-    <Nav defaultActiveKey="/./sudoku" className="flex-column">
+    <Nav defaultActiveKey="./sudoku" className="flex-column">
            <div className="navlinks">
-             <Nav.Link eventKey="./about"  href="./about">About</Nav.Link> 
-            <Nav.Link eventKey="./sudoku" href="./sudoku">Sudoku</Nav.Link> 
+           <Nav.Link eventKey="./about" to="./about" href="./about">About</Nav.Link> 
+            <Nav.Link eventKey="./sudoku" to="./sudoku" href="./sudoku">Sudoku</Nav.Link> 
             </div>
     </Nav>
    );

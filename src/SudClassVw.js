@@ -3,7 +3,10 @@ import {printSudoku,sudokuarr,fillsudokuarr,hideSudoku,hiddenSudokuarr,hiddenSud
 import './App.css';
 import ModalWind from './ModalWind';
 import Square from './Square';
-
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 /***************
  * developer: Vivek Sharma
  * date : 17-jun-21
@@ -73,7 +76,7 @@ export default class SudClassVw extends Component {
           //console.log("Shows state is "+this.state.show + " Clicked at-"+i+","+j);
       }//end of handleclick
 
-      handleOkbtn=()=>{
+      handleokbtn=()=>{
           var diffoption=this.state.selectedval;
           switch(diffoption){
               case "easy":
@@ -90,6 +93,7 @@ export default class SudClassVw extends Component {
 
        handleChange = (e) => {
         this.setState({selectedval:e.target.value});
+        this.handleokbtn();
          //console.log("Selection is "+ e.target.value);
       }
 
@@ -164,78 +168,91 @@ export default class SudClassVw extends Component {
           </div>
 
           <div className="downbtnrow">
-          <button  className="MenuBtn" onClick={()=> {
+          <Button variant="light" className="menubtn1"   onClick={()=> {
               this.resetGrid1();
-             }}> Reset </button>
-               <button  className="MenuBtn" onClick={()=> {
+             }}> Reset </Button>
+               <Button variant="light"  className="menubtn1"  onClick={()=> {
               this.NewGame();
-             }}> New </button>
-               <button  className="MenuBtn" onClick={()=> {
+             }}> New </Button>
+               <Button variant="light"  className="menubtn1"  onClick={()=> {
               this.checkGrid();
-             }}> Check </button>
-                <button  className="MenuBtn" onClick={()=> {
+             }}> Check </Button>
+                <Button variant="light" className="menubtn1"  onClick={()=> {
               this.solveGrid();
-             }}> Solve </button>
+             }}> Solve </Button>
           </div>
 
 
-          <ModalWind show={this.state.show} handleClose={this.handleClose}>
-            <div>
+          <Modal size="sm" show={this.state.show} onHide={this.handleClose} handleClose={this.handleClose}>
+          <Modal.Header closeButton>
+          <Modal.Title>Fill</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Container>
+          <Row className="justify-content-md-center">
               <div className="renderSq">
-            <button className="inputBtn" 
+            <Button variant="light"  className="inputBtn" 
             onClick={()=> { 
                 this.setValueSqr(1);
-              this.handleClose(); }}>1</button>
-               <button className="inputBtn" 
+              this.handleClose(); }}>1</Button>
+               <Button variant="light"  className="inputBtn" 
             onClick={()=> {  this.setValueSqr(2);
-            this.handleClose(); }}>2</button>
-               <button className="inputBtn" 
+            this.handleClose(); }}>2</Button>
+               <Button variant="light"  className="inputBtn" 
             onClick={()=> {  this.setValueSqr(3);
-            this.handleClose(); }}>3</button></div>
-    
+            this.handleClose(); }}>3</Button></div>
+    </Row><Row className="justify-content-md-center"> 
            <div className="renderSq">
-            <button className="inputBtn" 
+            <Button variant="light"  className="inputBtn" 
             onClick={()=> {  this.setValueSqr(4);
-            this.handleClose(); }}>4</button>
-               <button className="inputBtn" 
+            this.handleClose(); }}>4</Button>
+               <Button variant="light"  className="inputBtn" 
             onClick={()=> { this.setValueSqr(5);
-            this.handleClose(); }}>5</button>
-               <button className="inputBtn" 
+            this.handleClose(); }}>5</Button>
+               <Button variant="light"  className="inputBtn" 
             onClick={()=> {  this.setValueSqr(6);
-            this.handleClose(); }}>6</button></div>
-    
+            this.handleClose(); }}>6</Button></div>
+    </Row><Row className="justify-content-md-center"> 
           <div className="renderSq">
-            <button className="inputBtn" 
+            <Button variant="light"  className="inputBtn" 
             onClick={()=> {  this.setValueSqr(7);
-            this.handleClose(); }}>7</button>
-               <button className="inputBtn" 
+            this.handleClose(); }}>7</Button>
+               <Button variant="light"  className="inputBtn" 
             onClick={()=> {  this.setValueSqr(8);
-            this.handleClose(); }}>8</button>
-               <button className="inputBtn" 
+            this.handleClose(); }}>8</Button>
+               <Button variant="light"  className="inputBtn" 
             onClick={()=> { this.setValueSqr(9);
             this.handleClose();
-              }}>9</button></div>
-
+              }}>9</Button></div>
+</Row><Row className="justify-content-md-center"> 
                 <div className="renderSq">
-            <button className="inputBtn" 
+            <Button variant="light"  
             onClick={()=> {  this.setValueSqr(" ");
-            this.handleClose(); }}>Clear</button>
+            this.handleClose(); }}>Clear</Button>
+            </div>
+            </Row>
+            </Container>
+          </Modal.Body>
+          </Modal>
 
-                </div>
-    
-          </div>
-          </ModalWind>
-
-          <ModalWind show={this.state.showNewMode} handleClose={this.handleClose} handleOkbtn={this.handleOkbtn} windtype="difficulty">
-              <div>
+          <Modal show={this.state.showNewMode} onHide={this.handleClose} handleokbtn={this.handleokbtn} windtype="difficulty">
+          <Modal.Header closeButton>
+          <Modal.Title>Choose Difficulty level</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
               <label>Choose a level</label>
                 <select id="difficulty"  onChange={this.handleChange} className="SelectOption">
+                <option value="" defaultValue></option>
                 <option value="easy" defaultValue>Easy</option>
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
                 </select>
-              </div>
-          </ModalWind>
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="light" className="inputBtn" 
+            onClick={this.handleClose}>OK</Button>
+            </Modal.Footer>
+          </Modal>
           </main>
         )
     }

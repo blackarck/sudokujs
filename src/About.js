@@ -16,7 +16,6 @@ export default class About extends Component {
         return (
             <main>
                 <Container className="p-3">
-                <Jumbotron className="pb-1">
       <h1 className="header">Sudoku JavaScript Implementation</h1>
       <h2 className="header">Sudoku Algorithm (no backtracking)</h2>
       <hr />
@@ -59,7 +58,7 @@ For each of the nine box do below
           </Table>
 
       </p>
-    </Jumbotron>
+
                 </Container>
                  
             </main>

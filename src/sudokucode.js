@@ -3,7 +3,7 @@
 /***************
  * developer: Vivek Sharma
  * date : 17-jun-21
- * for sudoky program
+ * for sudoku program
  ***************/
 
 let sudokuarr= [[]];
