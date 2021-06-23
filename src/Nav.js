@@ -11,8 +11,9 @@ import  Nav from 'react-bootstrap/Nav';
 
 function Navin() {
   return (
-    <Nav className="flex-column">
-           <div className="navlinks"><Nav.Link eventKey="./about"  href="./about">About</Nav.Link> 
+    <Nav defaultActiveKey="/./sudoku" className="flex-column">
+           <div className="navlinks">
+             <Nav.Link eventKey="./about"  href="./about">About</Nav.Link> 
             <Nav.Link eventKey="./sudoku" href="./sudoku">Sudoku</Nav.Link> 
             </div>
     </Nav>

@@ -54,7 +54,7 @@ For each of the nine box do below
               <tr><td>Hosting</td><td>Firebase</td></tr>
               <tr><td>Developer</td><td>Vivek Sharma</td></tr>
               <tr><td>Github</td><td><Button variant="light" href="https://github.com/blackarck">profile</Button></td></tr>
-              <tr><td>Repository</td><td><Button variant="light" href="https://github.com/blackarck">repo</Button></td></tr>
+              <tr><td>Repository</td><td><Button variant="light" href="https://github.com/blackarck/sudokujs">repo</Button></td></tr>
 
           </Table>
 
