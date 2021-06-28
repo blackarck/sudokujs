@@ -20,14 +20,14 @@ export default class About extends Component {
       <h2 className="header">Sudoku Algorithm (no backtracking)</h2>
       <hr />
       <p>
-      This program fills the 9*9 grid with valid sudoku numbers. 2 dimension arrays play an important role in most 2d games. Sudoku is no exception, consider it as tiles which needs to fill up the screen at valid position. We pick a box try to insert a number there, run all the rules, if it works good if not try the next number.
-      This implementation don't use back tracking, although parts of algorithm tries to replicate the same scenario i.e. back track your steps and start with next iteration. Heart of this program is a javascript file sudokucode.js, github repository below.
+      This program fills the 9*9 grid with valid numbers. 2 dimension arrays play an important role in most 2d games. Sudoku is no exception, consider it as screen where we need to place tiles at valid position. We pick a box try to insert a number there, run all the rules, if it works good if not try the next number.
+      This implementation don't use recursion or traditional back tracking, although parts of algorithm tries to replicate the same scenario i.e. back track your steps and start with next iteration. Heart of this program is a javascript file sudokucode.js
       </p>
       <p><h2>Detailed Algorithm</h2></p>
       <p>
       <ListGroup variant="flush">
   <ListGroup.Item>Initialize all arrays used in the program</ListGroup.Item>
-  <ListGroup.Item>Create a randomized array of 9 numbers – tmpjumbarr</ListGroup.Item>
+  <ListGroup.Item>Create a randomized array of 9 numbers, to get unique puzzle every time – tmpjumbarr</ListGroup.Item>
 </ListGroup>
 <hr/>
 For each of the nine box do below 
@@ -58,7 +58,14 @@ For each of the nine box do below
           </Table>
 
       </p>
+      <p>There could be many means to achieve an objective in coding. All are correct as long as they meet a certain performance threshold. If you review the program in detail you will notice small steps have been added to improve performance ( in short terms number of loops the program jumps through). I have left a debugging message in the output
 
+<br/>"Got stuck gotta redo some steps."<br/>
+
+This line keeps track of number of times the program back tracked its step. Feel free to experiment with different parts of the algorithm to see how it impacts this. Right now it at most runs once or twice.</p>
+
+<h2>Updates</h2>
+<p>Added functionality to read params if ?val=nshowmenu is present don't show menu.</p>
                 </Container>
                  
             </main>

@@ -8,25 +8,39 @@
  import Container from 'react-bootstrap/Container'
  import Row from 'react-bootstrap/Row';
  import Col from 'react-bootstrap/Col';
+ //import {queryString,location} from 'query-string';
 
+ const queryString = require('query-string');
  /***************
  * developer: Vivek Sharma
  * date : 17-jun-21
  * for sudoky program
  ***************/
+ 
 
 function App() {
-  return (
+   const parsed = queryString.parse(window.location.search);
+  console.log("Parse value-"+parsed.val);
+  
+  var showmenu=true;
+  if(parsed.val==="nshowmenu"){
+    showmenu=false;
+    console.log("Showmenu is false");
+  }
+
+   return (
 
     <Router>
      <Appheader/>
      <Container fluid><Row>
        <Col md="3">
-      <Navin/></Col>
+      {showmenu && <Navin/>}
+      </Col>
       <Col md="auto">
       <Switch>
       <Route path="/about" component={About}/>
       <Route path="/sudoku" component={SudClassVw}/>
+      <Route path="/" component={SudClassVw}/>
       </Switch></Col>
       </Row>
       </Container>

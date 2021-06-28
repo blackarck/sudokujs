@@ -9,4 +9,6 @@ This program fills the 9*9 grid with valid sudoku numbers. 2 dimension arrays pl
 * Hosted On – Firebase
 * Developer – Vivek sharma
 
+Not optimised for mobile layout yet
+
 Thanks
