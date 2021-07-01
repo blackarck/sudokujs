@@ -184,7 +184,7 @@ export default class SudClassVw extends Component {
           </div>
 
 
-          <Modal size="sm" show={this.state.show} onHide={this.handleClose} handleClose={this.handleClose}>
+          <Modal size="sm" show={this.state.show} onHide={this.handleClose} handleClose={this.handleClose} class="optionscr">
           <Modal.Header closeButton>
           <Modal.Title>Fill</Modal.Title>
         </Modal.Header>

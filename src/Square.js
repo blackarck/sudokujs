@@ -9,7 +9,6 @@ import './App.css';
 
 export default class Square extends React.Component {
 
-
     render() {
    var disableon=false;
    var whichClass="SudokBtn";

@@ -9,6 +9,18 @@ This program fills the 9*9 grid with valid sudoku numbers. 2 dimension arrays pl
 * Hosted On – Firebase
 * Developer – Vivek sharma
 
-Not optimised for mobile layout yet
+
+### Mobile Layout
+    - Implemented
+    - Menu will not be visible
+    - Blocks will be smaller 
+
+### Show sudoku without menu
+    - https://sudoku.ioblitz.com/?val=nshowmenu
+
+## Steps to build
+
+* Download the package
+* run npm install
 
 Thanks

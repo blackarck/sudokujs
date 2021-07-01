@@ -20,12 +20,12 @@
 
 function App() {
    const parsed = queryString.parse(window.location.search);
-  console.log("Parse value-"+parsed.val);
+   //console.log("Parse value-"+parsed.val);
   
   var showmenu=true;
   if(parsed.val==="nshowmenu"){
     showmenu=false;
-    console.log("Showmenu is false");
+   // console.log("Showmenu is false");
   }
 
    return (

@@ -65,7 +65,8 @@ For each of the nine box do below
 This line keeps track of number of times the program back tracked its step. Feel free to experiment with different parts of the algorithm to see how it impacts this. Right now it at most runs once or twice.</p>
 
 <h2>Updates</h2>
-<p>Added functionality to read params if ?val=nshowmenu is present don't show menu.</p>
+<p>Added functionality to read params if /?val=nshowmenu is present don't show menu.</p>
+<p>Mobile friendly, no menu and smaller blocks so fits vertically</p>
                 </Container>
                  
             </main>
