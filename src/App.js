@@ -9,6 +9,15 @@
  import Row from 'react-bootstrap/Row';
  import Col from 'react-bootstrap/Col';
  //import {queryString,location} from 'query-string';
+ import firebase from "firebase/app";
+ import "firebase/auth";
+ import {
+  FirebaseAuthProvider,
+  FirebaseAuthConsumer,
+  IfFirebaseAuthed,
+  IfFirebaseAuthedAnd
+} from "@react-firebase/auth";
+import config from './fireconfig';
 
  const queryString = require('query-string');
  /***************

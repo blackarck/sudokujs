@@ -12,7 +12,7 @@ const Appheader = () => {
         <div>
            
             <div className="App-header">
-                Sudoku JS Implementation
+                Sudoku 
             </div>
         </div>
     )

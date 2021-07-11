@@ -26,6 +26,7 @@ export default class SudClassVw extends Component {
             sudoarr: hiddenSudokuarr,
             show: false,
             showNewMode:false,
+            showHelpMenu:false,
             iclick:0,
             jclick:0,
             selectedval:"easy",
@@ -70,6 +71,7 @@ export default class SudClassVw extends Component {
       handleClose=()=>{
         this.setState({show:false});
         this.setState({showNewMode:false});
+        this.setState({showHelpMenu:false});
       }
 
       handleClick=(i,j)=>{
@@ -86,8 +88,11 @@ export default class SudClassVw extends Component {
                case "medium":
                 this.restartGrid(1);
                 break;
-            case "hard":
+              case "hard":
                 this.restartGrid(2);
+                break;
+              default:
+                this.restartGrid(1);
                 break;
           }
        }
@@ -151,9 +156,12 @@ export default class SudClassVw extends Component {
 
       }
 
+      showHelp=()=>{
+        this.setState({showHelpMenu:true});
+      }
+
     render() {
         //we can have code here
-        
         return (
           <main>
           <div className="TopRow">
@@ -181,6 +189,9 @@ export default class SudClassVw extends Component {
                 <Button variant="light" className="menubtn1"  onClick={()=> {
               this.solveGrid();
              }}> Solve </Button>
+              <Button variant="light" className="menubtn1"  onClick={()=> {
+              this.showHelp();
+             }}> Help </Button>
           </div>
 
 
@@ -225,7 +236,7 @@ export default class SudClassVw extends Component {
             onClick={()=> { this.setValueSqr(9);
             this.handleClose();
               }}>9</Button></div>
-</Row><Row className="justify-content-md-center"> 
+    </Row><Row className="justify-content-md-center"> 
                 <div className="renderSq">
             <Button variant="light"  
             onClick={()=> {  this.setValueSqr(" ");
@@ -236,6 +247,7 @@ export default class SudClassVw extends Component {
           </Modal.Body>
           </Modal>
 
+        
           <Modal show={this.state.showNewMode} onHide={this.handleClose} handleokbtn={this.handleokbtn} windtype="difficulty">
           <Modal.Header closeButton>
           <Modal.Title>Choose Difficulty level</Modal.Title>
@@ -253,6 +265,20 @@ export default class SudClassVw extends Component {
                 <Button variant="light" className="inputBtn" 
             onClick={this.handleClose}>OK</Button>
             </Modal.Footer>
+          </Modal>
+
+          <Modal show={this.state.showHelpMenu} onHide={this.handleClose} handleokbtn={this.handleokbtn}>
+            <Modal.Header closeButton>
+              <Modal.Title>Sudoku Help</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <h4>Reset</h4>
+              <p>Will reset the grid, you will loose all your data</p>
+              <h4>Check</h4>
+              <p>Will turn a box red if entry is incorrect (x)</p>
+              <h4>Solve</h4>
+              <p>Will solve the puzzle</p>
+            </Modal.Body>
           </Modal>
           </main>
         )

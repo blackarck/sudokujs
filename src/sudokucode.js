@@ -151,8 +151,8 @@ const checkrules=(posi,posj,inpval)=>{
     if(posi>=0 && posi<=2 && posj>=3 && posj <=5){
         //console.log("Coming in grid 2");
         outer_loop:
-        for(var i=0;i<=2;i++){
-            for(var j=3;j<=5;j++){
+        for(let i=0;i<=2;i++){
+            for(let j=3;j<=5;j++){
                 if(sudokuarr[i][j]===inpval){
                     retvalue=false;
                     break outer_loop;
@@ -164,8 +164,8 @@ const checkrules=(posi,posj,inpval)=>{
     if(posi>=0 && posi<=2 && posj>=6 && posj <=8){
         //console.log("Coming in grid 3");
         outer_loop:
-        for(var i=0;i<=2;i++){
-            for(var j=6;j<=8;j++){
+        for(let i=0;i<=2;i++){
+            for(let j=6;j<=8;j++){
                 if(sudokuarr[i][j]===inpval){
                     retvalue=false;
                     break outer_loop;
@@ -178,8 +178,8 @@ const checkrules=(posi,posj,inpval)=>{
     if(posi>=3 && posi<=5 && posj>=0 && posj <=2){
         //console.log("Coming in grid 4");
         outer_loop:
-        for(var i=3;i<=5;i++){
-            for(var j=0;j<=2;j++){
+        for(let i=3;i<=5;i++){
+            for(let j=0;j<=2;j++){
                 if(sudokuarr[i][j]===inpval){
                     retvalue=false;
                     break outer_loop;
@@ -191,8 +191,8 @@ const checkrules=(posi,posj,inpval)=>{
     if(posi>=3 && posi<=5 && posj>=3 && posj <=5){
         //console.log("Coming in grid 5");
         outer_loop:
-        for(var i=3;i<=5;i++){
-            for(var j=3;j<=5;j++){
+        for(let i=3;i<=5;i++){
+            for(let j=3;j<=5;j++){
                 if(sudokuarr[i][j]===inpval){
                     retvalue=false;
                     break outer_loop;
@@ -204,8 +204,8 @@ const checkrules=(posi,posj,inpval)=>{
     if(posi>=3 && posi<=5 && posj>=6 && posj <=8){
         //console.log("Coming in grid 6");
         outer_loop:
-        for(var i=3;i<=5;i++){
-            for(var j=6;j<=8;j++){
+        for(let i=3;i<=5;i++){
+            for(let j=6;j<=8;j++){
                 if(sudokuarr[i][j]===inpval){
                     retvalue=false;
                     break outer_loop;
@@ -218,8 +218,8 @@ const checkrules=(posi,posj,inpval)=>{
     if(posi>=6 && posi<=8 && posj>=0 && posj <=2){
         //console.log("Coming in grid 7");
         outer_loop:
-        for(var i=6;i<=8;i++){
-            for(var j=0;j<=2;j++){
+        for(let i=6;i<=8;i++){
+            for(let j=0;j<=2;j++){
                 if(sudokuarr[i][j]===inpval){
                     retvalue=false;
                     break outer_loop;
@@ -231,8 +231,8 @@ const checkrules=(posi,posj,inpval)=>{
     if(posi>=6 && posi<=8 && posj>=3 && posj <=5){
         //console.log("Coming in grid 8");
         outer_loop:
-        for(var i=6;i<=8;i++){
-            for(var j=3;j<=5;j++){
+        for(let i=6;i<=8;i++){
+            for(let j=3;j<=5;j++){
                 if(sudokuarr[i][j]===inpval){
                     retvalue=false;
                     break outer_loop;
@@ -244,8 +244,8 @@ const checkrules=(posi,posj,inpval)=>{
     if(posi>=6 && posi<=8 && posj>=6 && posj <=8){
         //console.log("Coming in grid 9");
         outer_loop:
-        for(var i=6;i<=8;i++){
-            for(var j=6;j<=8;j++){
+        for(let i=6;i<=8;i++){
+            for(let j=6;j<=8;j++){
                 if(sudokuarr[i][j]===inpval){
                     retvalue=false;
                     break outer_loop;
@@ -326,8 +326,8 @@ const callHide=(numberofit)=>{
     for(let l=0;l<(81-numberofit);l++){
         //call random i
         //call random j
-        var i= (Math.trunc(Math.random()*10))%9;
-        var j= (Math.trunc(Math.random()*10))%9;
+        let i= (Math.trunc(Math.random()*10))%9;
+        let j= (Math.trunc(Math.random()*10))%9;
          hiddenSudokuarr[i][j]=" ";
         //console.log("Random i is "+i +", j is "+j);
     }
