@@ -22,5 +22,6 @@ This program fills the 9*9 grid with valid sudoku numbers. 2 dimension arrays pl
 
 * Download the package
 * run npm install
+* npm start
 
 Thanks

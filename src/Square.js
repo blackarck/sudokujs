@@ -12,10 +12,16 @@ export default class Square extends React.Component {
     render() {
    var disableon=false;
    var whichClass="SudokBtn";
+ 
    if(this.props.value===this.props.hidenarr && this.props.value !==" "){
     //console.log("it should be disabled ");
     disableon=true;
     whichClass="SudokuDisBtn"
+  }
+
+  if( (this.props.clickColor+"").substring(0,1) === this.props.ival+"" && (this.props.clickColor + "").substring(2,1)===this.props.jval +""){
+    whichClass=whichClass + " sudokubtncolor";
+    //console.log("Coming here ");
   }
 
   if( String(this.props.value).endsWith("x")){

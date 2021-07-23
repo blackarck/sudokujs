@@ -30,6 +30,7 @@ export default class SudClassVw extends Component {
             iclick:0,
             jclick:0,
             selectedval:"easy",
+            clickColor: "00",
         }
     }
 
@@ -62,6 +63,7 @@ export default class SudClassVw extends Component {
           <Square
             value={this.state.sudoarr[i][j]}
             hidenarr={hiddenSudokuclone[i][j]}
+            clickColor={this.state.clickColor}
             ival={i} jval={j}
             onClick={() => this.handleClick(i,j)}
           />
@@ -75,7 +77,11 @@ export default class SudClassVw extends Component {
       }
 
       handleClick=(i,j)=>{
+        if(   window.innerWidth > 480 ){
           this.setState({show:true, iclick:i,jclick:j})
+        }else{
+          this.setState({iclick:i, jclick:j, clickColor:""+i+j})
+        }
           //console.log("Shows state is "+this.state.show + " Clicked at-"+i+","+j);
       }//end of handleclick
 
@@ -164,7 +170,7 @@ export default class SudClassVw extends Component {
         //we can have code here
         return (
           <main>
-          <div className="TopRow">
+          <div className="TopRow container-fluid">
           <div className="inarow">{this.renderSquare(0,0)}{this.renderSquare(0,1)}{this.renderSquare(0,2)}{this.renderSquare(0,3)}{this.renderSquare(0,4)}{this.renderSquare(0,5)}{this.renderSquare(0,6)}{this.renderSquare(0,7)}{this.renderSquare(0,8)}</div>
           <div className="inarow">{this.renderSquare(1,0)}{this.renderSquare(1,1)}{this.renderSquare(1,2)}{this.renderSquare(1,3)}{this.renderSquare(1,4)}{this.renderSquare(1,5)}{this.renderSquare(1,6)}{this.renderSquare(1,7)}{this.renderSquare(1,8)}</div>
           <div className="inarow">{this.renderSquare(2,0)}{this.renderSquare(2,1)}{this.renderSquare(2,2)}{this.renderSquare(2,3)}{this.renderSquare(2,4)}{this.renderSquare(2,5)}{this.renderSquare(2,6)}{this.renderSquare(2,7)}{this.renderSquare(2,8)}</div>
@@ -176,7 +182,44 @@ export default class SudClassVw extends Component {
           <div className="inarow">{this.renderSquare(8,0)}{this.renderSquare(8,1)}{this.renderSquare(8,2)}{this.renderSquare(8,3)}{this.renderSquare(8,4)}{this.renderSquare(8,5)}{this.renderSquare(8,6)}{this.renderSquare(8,7)}{this.renderSquare(8,8)}</div>
           </div>
 
-          <div className="downbtnrow">
+
+          <div className="container-fluid">
+          <Button variant="light"  className="rowBtn" 
+            onClick={()=> { 
+                this.setValueSqr(1);
+              this.handleClose(); }}>1</Button>
+               <Button variant="light"  className="rowBtn" 
+            onClick={()=> {  this.setValueSqr(2);
+            this.handleClose(); }}>2</Button>
+               <Button variant="light"  className="rowBtn" 
+            onClick={()=> {  this.setValueSqr(3);
+            this.handleClose(); }}>3</Button>
+            <Button variant="light"  className="rowBtn" 
+            onClick={()=> {  this.setValueSqr(4);
+            this.handleClose(); }}>4</Button>
+               <Button variant="light"  className="rowBtn" 
+            onClick={()=> { this.setValueSqr(5);
+            this.handleClose(); }}>5</Button>
+               <Button variant="light"  className="rowBtn" 
+            onClick={()=> {  this.setValueSqr(6);
+            this.handleClose(); }}>6</Button>
+             <Button variant="light"  className="rowBtn" 
+            onClick={()=> {  this.setValueSqr(7);
+            this.handleClose(); }}>7</Button>
+               <Button variant="light"  className="rowBtn" 
+            onClick={()=> {  this.setValueSqr(8);
+            this.handleClose(); }}>8</Button>
+               <Button variant="light"  className="rowBtn" 
+            onClick={()=> { this.setValueSqr(9);
+            this.handleClose();
+              }}>9</Button>
+              <p></p>
+              <Button variant="light"  
+            onClick={()=> {  this.setValueSqr(" ");
+            this.handleClose(); }}>Clear</Button>
+          </div>
+
+          <div className="downbtnrow container-fluid">
           <Button variant="light" className="menubtn1"   onClick={()=> {
               this.resetGrid1();
              }}> Reset </Button>
@@ -201,7 +244,7 @@ export default class SudClassVw extends Component {
         </Modal.Header>
         <Modal.Body>
         <Container>
-          <Row className="justify-content-md-center">
+          <Row className="justify-content-sm-center">
               <div className="renderSq">
             <Button variant="light"  className="inputBtn" 
             onClick={()=> { 

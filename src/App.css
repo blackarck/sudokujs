@@ -89,7 +89,7 @@ max-width: 200px;}
   width: 45px;
   color:rgb(44, 81, 148);
   font-size: 15px;
-  margin-right:1 px;
+  margin-right: 1px;
   background-color: rgb(235, 235, 235);
   border: none;
   vertical-align: bottom;
@@ -176,23 +176,34 @@ max-width: 200px;}
   width:10px;
 }
 
+/*
+.rowbuttons{
+  display: none;
+}
+*/
+
 @media all and (min-width:321px) and (max-width: 480px) {
   /* put your css styles in here */
   .SudokBtn{
-    height: 30px;
-    width: 30px;
-    color:rgb(105, 107, 102);
-    font-size: 14px;
+    height: 34px;
+    width: 34px;
+    color:rgb(81, 82, 81);
+    font-size: 16px;
     margin-right:1px;
     background-color: white;
     border: .5px solid rgb(200, 216, 200);
     vertical-align: bottom;
   }
 
+  .sudokubtncolor{
+    background-color: rgb(187, 212, 241);
+  }
+
+
   .SudokuDisBtn{
-    height: 30px;
-    width: 30px;
-    color:rgb(134, 134, 132);
+    height: 34px;
+    width: 34px;
+    color:rgb(105, 105, 105);
     font-size: 14px;
     margin-right:1px;
     background-color: rgb(233, 233, 233);
@@ -201,13 +212,13 @@ max-width: 200px;}
   }
 
   main {
-    margin-left: 1rem;
-    padding: 1rem;
+    margin-left: 5px;
+    padding: 5px;
   }
 
   .MenuBtn{
     height: 25px;
-    width: 50px;
+    width: 30px;
     color:rgb(74, 76, 77);
     font-size: 13px;
     margin-right:5px;
@@ -247,6 +258,24 @@ max-width: 200px;}
 }
 
 .menubtn1{
-  margin-right:5px;
+  margin-right: 2px;
   margin-top: 5px;
+  max-width: 60px;
+}
+
+.rowBtn{
+  margin-top: 7px;
+  margin-right: 2px;
+  font-size: 12px;
+}
+
+.optionscr{
+  display:none;
+}
+ 
+p{
+  font-size: 8pt;
+}
+h4{
+  font-size: 10pt;
 }

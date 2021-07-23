@@ -9,6 +9,8 @@ import  Nav from 'react-bootstrap/Nav';
  ***************/
 
 function Navin() {
+ 
+ 
   return (
     <Nav defaultActiveKey="./sudoku" className="flex-column">
            <div className="navlinks">
