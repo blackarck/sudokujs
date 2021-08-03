@@ -1,13 +1,27 @@
-import React, { Component } from 'react';
-import {printSudoku,sudokuarr,fillsudokuarr,hideSudoku,hiddenSudokuarr,hiddenSudokuclone} from './sudokucode';
-import './App.css';
-import ModalWind from './ModalWind';
-import Square from './Square';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-
+import React, { Component } from "react";
+import {
+  printSudoku,
+  sudokuarr,
+  fillsudokuarr,
+  hideSudoku,
+  hiddenSudokuarr,
+  hiddenSudokuclone,
+} from "./sudokucode";
+import "./css/App.css";
+import ModalWind from "./ModalWind";
+import Square from "./Square";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tipshow from "./tipshow";
+import saveico from "./img/saveico.svg";
+import helpico from "./img/helpico.svg";
+import clearico from "./img/clearico.svg";
+import loginsrvc from "./loginsrvc";
+import gamesrvc from "./gamesrvc";
 /***************
  * developer: Vivek Sharma
  * date : 17-jun-21
@@ -15,315 +29,733 @@ import Row from 'react-bootstrap/Row';
  ***************/
 
 export default class SudClassVw extends Component {
+  islogin = false;
+  gameService = new gamesrvc();
+  constructor(props) {
+    super(props);
+    fillsudokuarr();
+    hideSudoku(2);
+    this.islogin = localStorage.getItem("loginstate") || false;
+    //calculate hidden sudoku puzzle and define initial puzzle
+    this.state = {
+      sudoarr: hiddenSudokuarr,
+      hidsudoarr: hiddenSudokuclone,
+      fullsudokuarr: sudokuarr,
+      show: false,
+      showNewMode: false,
+      showHelpMenu: false,
+      iclick: 0,
+      jclick: 0,
+      selectedval: "easy",
+      clickColor: "00",
+      showtip: true,
+      showsave: localStorage.getItem("loginstate"),
+      gameid: "",
+    };
+  }
 
-    constructor(props){
-        super(props);
-        fillsudokuarr();
-        hideSudoku(2);
+  NewGame = () => {
+    this.setState({ showNewMode: true });
+  };
 
-        //calculate hidden sudoku puzzle and define initial puzzle
-        this.state = {
-            sudoarr: hiddenSudokuarr,
-            show: false,
-            showNewMode:false,
-            showHelpMenu:false,
-            iclick:0,
-            jclick:0,
-            selectedval:"easy",
-            clickColor: "00",
-        }
+  resetGrid1 = () => {
+    //printSudoku(2);
+    var squarearr1 = [[]];
+    for (let i = 0; i < 9; i++) {
+      squarearr1[i] = new Array(9);
     }
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        // squarearr1[i][j] = hiddenSudokuclone[i][j];
 
-    NewGame=()=>{
-        this.setState({showNewMode:true});
+        squarearr1[i][j] = this.state.hidsudoarr[i][j];
+      }
     }
+    //const squarearr1 = hiddenSudokuclone.slice();
+    this.setState({ sudoarr: squarearr1 });
+  };
 
-    resetGrid1=()=>{
-        //printSudoku(2);
-        var squarearr1=[[]];
-        for(let i=0;i<9;i++){
-            squarearr1[i]=new Array(9);
-             
-        }
-        for(let i=0;i<9;i++){
-            for(let j=0;j<9;j++){
-                squarearr1[i][j] = hiddenSudokuclone[i][j];
-            }
-        }
-        //const squarearr1 = hiddenSudokuclone.slice();
-         this.setState({sudoarr: squarearr1});
+  showsaveOff = () => {
+    console.log("Save button off ");
+    this.setState({ showsave: false });
+  };
+  showsaveOn = () => {
+    console.log("Save button on ");
+
+    this.setState({ showsave: true });
+  };
+
+  solveGrid = () => {
+    this.setState({ sudoarr: this.state.fullsudokuarr });
+  };
+
+  renderSquare = (i, j) => {
+    return (
+      <Square
+        value={this.state.sudoarr[i][j]}
+        //hidenarr={hiddenSudokuclone[i][j]}
+        hidenarr={this.state.hidsudoarr[i][j]}
+        clickColor={this.state.clickColor}
+        ival={i}
+        jval={j}
+        onClick={() => this.handleClick(i, j)}
+      />
+    );
+  }; //end of rendersquare
+
+  renderTooltip = (props) => {
+    return (
+      <Tooltip id="button-tooltip" {...props}>
+        {props.texttoshow}
+      </Tooltip>
+    );
+  }; // end of rendertooltip
+
+  handleClose = () => {
+    this.setState({
+      show: false,
+      showNewMode: false,
+      showHelpMenu: false,
+      showtip: false,
+    });
+  };
+
+  handleClick = (i, j) => {
+    if (window.innerWidth > 480) {
+      this.setState({ show: true, iclick: i, jclick: j });
+    } else {
+      this.setState({ iclick: i, jclick: j, clickColor: "" + i + j });
     }
+    //console.log("Shows state is "+this.state.show + " Clicked at-"+i+","+j);
+  }; //end of handleclick
 
-    solveGrid=()=>{
-        this.setState({sudoarr:sudokuarr});
+  handleokbtn = () => {
+    var diffoption = this.state.selectedval;
+    switch (diffoption) {
+      case "easy":
+        this.restartGrid(1);
+        break;
+      case "medium":
+        this.restartGrid(1);
+        break;
+      case "hard":
+        this.restartGrid(2);
+        break;
+      default:
+        this.restartGrid(1);
+        break;
     }
+  };
 
-    renderSquare=(i,j)=> {
-        return (
-          <Square
-            value={this.state.sudoarr[i][j]}
-            hidenarr={hiddenSudokuclone[i][j]}
-            clickColor={this.state.clickColor}
-            ival={i} jval={j}
-            onClick={() => this.handleClick(i,j)}
-          />
-        );
-      }//end of rendersquare
+  handleChange = (e) => {
+    this.setState({ selectedval: e.target.value });
+    this.handleokbtn();
+    //console.log("Selection is "+ e.target.value);
+  };
 
-      handleClose=()=>{
-        this.setState({show:false});
-        this.setState({showNewMode:false});
-        this.setState({showHelpMenu:false});
-      }
+  setValueSqr = (i) => {
+    const squarearr = this.state.sudoarr.slice();
+    squarearr[this.state.iclick][this.state.jclick] = i;
+    this.setState({ sudoarr: squarearr });
 
-      handleClick=(i,j)=>{
-        if(   window.innerWidth > 480 ){
-          this.setState({show:true, iclick:i,jclick:j})
-        }else{
-          this.setState({iclick:i, jclick:j, clickColor:""+i+j})
+    this.checkWin();
+  };
+
+  restartGrid = (diffi) => {
+    fillsudokuarr();
+    hideSudoku(diffi);
+    this.setState({
+      gameid: "",
+      sudoarr: hiddenSudokuarr,
+      hidsudoarr: hiddenSudokuarr,
+      fullsudokuarr: sudokuarr,
+    });
+  };
+
+  checkGrid = () => {
+    //go through all the words
+    // mark red which are incorrect
+    const checkArr = this.state.sudoarr.slice();
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (
+          checkArr[i][j] !== this.state.fullsudokuarr[i][j] &&
+          checkArr[i][j] !== " "
+        ) {
+          checkArr[i][j] = checkArr[i][j] + "x";
         }
-          //console.log("Shows state is "+this.state.show + " Clicked at-"+i+","+j);
-      }//end of handleclick
-
-      handleokbtn=()=>{
-          var diffoption=this.state.selectedval;
-          switch(diffoption){
-              case "easy":
-                  this.restartGrid(1);
-                  break;
-               case "medium":
-                this.restartGrid(1);
-                break;
-              case "hard":
-                this.restartGrid(2);
-                break;
-              default:
-                this.restartGrid(1);
-                break;
-          }
-       }
-
-       handleChange = (e) => {
-        this.setState({selectedval:e.target.value});
-        this.handleokbtn();
-         //console.log("Selection is "+ e.target.value);
       }
+    } //end of for
+    this.setState({ sudoarr: checkArr });
+  };
 
-      setValueSqr=(i)=>{
-        const squarearr = this.state.sudoarr.slice();
-        squarearr[this.state.iclick][this.state.jclick] = i;
-        this.setState({sudoarr:squarearr});
-
-        this.checkWin();
-      }
-
-      restartGrid=(diffi)=>{
-      
-        fillsudokuarr();
-        hideSudoku(diffi);
-        this.setState({sudoarr:hiddenSudokuarr});
-      }
-
-      checkGrid=()=>{
-        //go through all the words
-        // mark red which are incorrect
-        const checkArr= this.state.sudoarr.slice();
-        for(let i=0;i<9;i++){
-            for(let j=0;j<9;j++){
-                if(
-                    checkArr[i][j] !== sudokuarr[i][j] && checkArr[i][j]!==" "){
-                    checkArr[i][j] =  checkArr[i][j] + "x";
-                }
-            }
-        }//end of for
-        this.setState({sudoarr:checkArr});
-
-      }
-
-      checkWin=()=>{
-        //checkwin condition
-        //do a compare of this grid with our filled grid if all equal its won 
-        //show an alert
-        var isWon=true;
-        const checkArr= this.state.sudoarr.slice();
-        outerloop:
-        for(let i=0;i<9;i++){
-            for(let j=0;j<9;j++){
-                if(
-                    checkArr[i][j] !== sudokuarr[i][j]){
-                    isWon=false;
-                    break outerloop;
-                }
-            }
+  checkWin = () => {
+    //checkwin condition
+    //do a compare of this grid with our filled grid if all equal its won
+    //show an alert
+    var isWon = true;
+    const checkArr = this.state.sudoarr.slice();
+    outerloop: for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (checkArr[i][j] !== this.state.fullsudokuarr[i][j]) {
+          isWon = false;
+          break outerloop;
         }
-        if(isWon){
-            alert("Yay !! you won ");
-        }
-
       }
+    }
+    if (isWon) {
+      alert("Yay !! you won ");
+    }
+  };
 
-      showHelp=()=>{
-        this.setState({showHelpMenu:true});
-      }
+  showHelp = () => {
+    this.setState({ showHelpMenu: true });
+  };
 
-    render() {
-        //we can have code here
-        return (
-          <main>
-          <div className="TopRow container-fluid">
-          <div className="inarow">{this.renderSquare(0,0)}{this.renderSquare(0,1)}{this.renderSquare(0,2)}{this.renderSquare(0,3)}{this.renderSquare(0,4)}{this.renderSquare(0,5)}{this.renderSquare(0,6)}{this.renderSquare(0,7)}{this.renderSquare(0,8)}</div>
-          <div className="inarow">{this.renderSquare(1,0)}{this.renderSquare(1,1)}{this.renderSquare(1,2)}{this.renderSquare(1,3)}{this.renderSquare(1,4)}{this.renderSquare(1,5)}{this.renderSquare(1,6)}{this.renderSquare(1,7)}{this.renderSquare(1,8)}</div>
-          <div className="inarow">{this.renderSquare(2,0)}{this.renderSquare(2,1)}{this.renderSquare(2,2)}{this.renderSquare(2,3)}{this.renderSquare(2,4)}{this.renderSquare(2,5)}{this.renderSquare(2,6)}{this.renderSquare(2,7)}{this.renderSquare(2,8)}</div>
-          <div className="inarow">{this.renderSquare(3,0)}{this.renderSquare(3,1)}{this.renderSquare(3,2)}{this.renderSquare(3,3)}{this.renderSquare(3,4)}{this.renderSquare(3,5)}{this.renderSquare(3,6)}{this.renderSquare(3,7)}{this.renderSquare(3,8)}</div>
-          <div className="inarow">{this.renderSquare(4,0)}{this.renderSquare(4,1)}{this.renderSquare(4,2)}{this.renderSquare(4,3)}{this.renderSquare(4,4)}{this.renderSquare(4,5)}{this.renderSquare(4,6)}{this.renderSquare(4,7)}{this.renderSquare(4,8)}</div>
-          <div className="inarow">{this.renderSquare(5,0)}{this.renderSquare(5,1)}{this.renderSquare(5,2)}{this.renderSquare(5,3)}{this.renderSquare(5,4)}{this.renderSquare(5,5)}{this.renderSquare(5,6)}{this.renderSquare(5,7)}{this.renderSquare(5,8)}</div>
-          <div className="inarow">{this.renderSquare(6,0)}{this.renderSquare(6,1)}{this.renderSquare(6,2)}{this.renderSquare(6,3)}{this.renderSquare(6,4)}{this.renderSquare(6,5)}{this.renderSquare(6,6)}{this.renderSquare(6,7)}{this.renderSquare(6,8)}</div>
-          <div className="inarow">{this.renderSquare(7,0)}{this.renderSquare(7,1)}{this.renderSquare(7,2)}{this.renderSquare(7,3)}{this.renderSquare(7,4)}{this.renderSquare(7,5)}{this.renderSquare(7,6)}{this.renderSquare(7,7)}{this.renderSquare(7,8)}</div>
-          <div className="inarow">{this.renderSquare(8,0)}{this.renderSquare(8,1)}{this.renderSquare(8,2)}{this.renderSquare(8,3)}{this.renderSquare(8,4)}{this.renderSquare(8,5)}{this.renderSquare(8,6)}{this.renderSquare(8,7)}{this.renderSquare(8,8)}</div>
+  saveGame = () => {
+    //check whether user is logged in or not
+    if (localStorage.getItem("loginstate")) {
+      console.log("User logged in moving forward");
+      //parms to pass
+      // currentstate - this.state.sudoarr
+      // completestate - sudokuarr
+      // hiddenstate - hiddenSudokuarr
+      let gamedata = {
+        currentstate: this.state.sudoarr,
+        completestate: this.state.fullsudokuarr,
+        hiddenstate: hiddenSudokuclone,
+        gameid: this.state.gameid,
+      };
+      this.gameService.savegame(gamedata).then((res) => {
+        // console.log("Game saved " + JSON.stringify(res));
+        this.loadgame(this.state.gameid);
+      });
+    } else {
+      alert("Have to login to save");
+    }
+    //save the game
+  };
+
+  loadgame = (gameid) => {
+    this.gameService.loadgame(gameid).then((res) => {
+      console.log("gstate is " + this.process2darr(res[0].gstate));
+      var sudoarr2d = this.process2darr(res[0].gstate);
+      var harr2d = this.process2darr(res[0].hstate);
+      var carr2d = this.process2darr(res[0].cstate);
+
+      this.setState({
+        sudoarr: sudoarr2d,
+        gameid: res[0].id,
+        hidsudoarr: harr2d,
+        fullsudokuarr: carr2d,
+      });
+    }); //end of game service
+  }; //load new game
+
+  process2darr(valstr) {
+    let ret2darr = [[]];
+    valstr = valstr.replace("'", "").replace("'", "");
+    var arr1d = valstr.split(",");
+
+    ret2darr.pop();
+    for (var i = 0; i <= 8; i++) {
+      var arr1dd = arr1d.splice(0, 9);
+      ret2darr.push(arr1dd);
+    }
+    return ret2darr;
+  }
+
+  render() {
+    //we can have code here
+    return (
+      <main>
+        <div className="TopRow container-fluid">
+          <div className="inarow">
+            {this.renderSquare(0, 0)}
+            {this.renderSquare(0, 1)}
+            {this.renderSquare(0, 2)}
+            {this.renderSquare(0, 3)}
+            {this.renderSquare(0, 4)}
+            {this.renderSquare(0, 5)}
+            {this.renderSquare(0, 6)}
+            {this.renderSquare(0, 7)}
+            {this.renderSquare(0, 8)}
           </div>
-
-
-          <div className="container-fluid">
-          <Button variant="light"  className="rowBtn" 
-            onClick={()=> { 
-                this.setValueSqr(1);
-              this.handleClose(); }}>1</Button>
-               <Button variant="light"  className="rowBtn" 
-            onClick={()=> {  this.setValueSqr(2);
-            this.handleClose(); }}>2</Button>
-               <Button variant="light"  className="rowBtn" 
-            onClick={()=> {  this.setValueSqr(3);
-            this.handleClose(); }}>3</Button>
-            <Button variant="light"  className="rowBtn" 
-            onClick={()=> {  this.setValueSqr(4);
-            this.handleClose(); }}>4</Button>
-               <Button variant="light"  className="rowBtn" 
-            onClick={()=> { this.setValueSqr(5);
-            this.handleClose(); }}>5</Button>
-               <Button variant="light"  className="rowBtn" 
-            onClick={()=> {  this.setValueSqr(6);
-            this.handleClose(); }}>6</Button>
-             <Button variant="light"  className="rowBtn" 
-            onClick={()=> {  this.setValueSqr(7);
-            this.handleClose(); }}>7</Button>
-               <Button variant="light"  className="rowBtn" 
-            onClick={()=> {  this.setValueSqr(8);
-            this.handleClose(); }}>8</Button>
-               <Button variant="light"  className="rowBtn" 
-            onClick={()=> { this.setValueSqr(9);
-            this.handleClose();
-              }}>9</Button>
-              <p></p>
-              <Button variant="light"  
-            onClick={()=> {  this.setValueSqr(" ");
-            this.handleClose(); }}>Clear</Button>
+          <div className="inarow">
+            {this.renderSquare(1, 0)}
+            {this.renderSquare(1, 1)}
+            {this.renderSquare(1, 2)}
+            {this.renderSquare(1, 3)}
+            {this.renderSquare(1, 4)}
+            {this.renderSquare(1, 5)}
+            {this.renderSquare(1, 6)}
+            {this.renderSquare(1, 7)}
+            {this.renderSquare(1, 8)}
           </div>
+          <div className="inarow">
+            {this.renderSquare(2, 0)}
+            {this.renderSquare(2, 1)}
+            {this.renderSquare(2, 2)}
+            {this.renderSquare(2, 3)}
+            {this.renderSquare(2, 4)}
+            {this.renderSquare(2, 5)}
+            {this.renderSquare(2, 6)}
+            {this.renderSquare(2, 7)}
+            {this.renderSquare(2, 8)}
+          </div>
+          <div className="inarow">
+            {this.renderSquare(3, 0)}
+            {this.renderSquare(3, 1)}
+            {this.renderSquare(3, 2)}
+            {this.renderSquare(3, 3)}
+            {this.renderSquare(3, 4)}
+            {this.renderSquare(3, 5)}
+            {this.renderSquare(3, 6)}
+            {this.renderSquare(3, 7)}
+            {this.renderSquare(3, 8)}
+          </div>
+          <div className="inarow">
+            {this.renderSquare(4, 0)}
+            {this.renderSquare(4, 1)}
+            {this.renderSquare(4, 2)}
+            {this.renderSquare(4, 3)}
+            {this.renderSquare(4, 4)}
+            {this.renderSquare(4, 5)}
+            {this.renderSquare(4, 6)}
+            {this.renderSquare(4, 7)}
+            {this.renderSquare(4, 8)}
+          </div>
+          <div className="inarow">
+            {this.renderSquare(5, 0)}
+            {this.renderSquare(5, 1)}
+            {this.renderSquare(5, 2)}
+            {this.renderSquare(5, 3)}
+            {this.renderSquare(5, 4)}
+            {this.renderSquare(5, 5)}
+            {this.renderSquare(5, 6)}
+            {this.renderSquare(5, 7)}
+            {this.renderSquare(5, 8)}
+          </div>
+          <div className="inarow">
+            {this.renderSquare(6, 0)}
+            {this.renderSquare(6, 1)}
+            {this.renderSquare(6, 2)}
+            {this.renderSquare(6, 3)}
+            {this.renderSquare(6, 4)}
+            {this.renderSquare(6, 5)}
+            {this.renderSquare(6, 6)}
+            {this.renderSquare(6, 7)}
+            {this.renderSquare(6, 8)}
+          </div>
+          <div className="inarow">
+            {this.renderSquare(7, 0)}
+            {this.renderSquare(7, 1)}
+            {this.renderSquare(7, 2)}
+            {this.renderSquare(7, 3)}
+            {this.renderSquare(7, 4)}
+            {this.renderSquare(7, 5)}
+            {this.renderSquare(7, 6)}
+            {this.renderSquare(7, 7)}
+            {this.renderSquare(7, 8)}
+          </div>
+          <div className="inarow">
+            {this.renderSquare(8, 0)}
+            {this.renderSquare(8, 1)}
+            {this.renderSquare(8, 2)}
+            {this.renderSquare(8, 3)}
+            {this.renderSquare(8, 4)}
+            {this.renderSquare(8, 5)}
+            {this.renderSquare(8, 6)}
+            {this.renderSquare(8, 7)}
+            {this.renderSquare(8, 8)}
+          </div>
+        </div>
 
-          <div className="downbtnrow container-fluid">
-          <Button variant="light" className="menubtn1"   onClick={()=> {
+        <div className="container-fluid">
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(1);
+              this.handleClose();
+            }}
+          >
+            1
+          </Button>
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(2);
+              this.handleClose();
+            }}
+          >
+            2
+          </Button>
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(3);
+              this.handleClose();
+            }}
+          >
+            3
+          </Button>
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(4);
+              this.handleClose();
+            }}
+          >
+            4
+          </Button>
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(5);
+              this.handleClose();
+            }}
+          >
+            5
+          </Button>
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(6);
+              this.handleClose();
+            }}
+          >
+            6
+          </Button>
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(7);
+              this.handleClose();
+            }}
+          >
+            7
+          </Button>
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(8);
+              this.handleClose();
+            }}
+          >
+            8
+          </Button>
+          <Button
+            variant="light"
+            className="rowBtn"
+            onClick={() => {
+              this.setValueSqr(9);
+              this.handleClose();
+            }}
+          >
+            9
+          </Button>
+          <p></p>
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "clear" })}
+          >
+            <Button
+              variant="light"
+              onClick={() => {
+                this.setValueSqr(" ");
+                this.handleClose();
+              }}
+            >
+              <img src={clearico} />
+            </Button>
+          </OverlayTrigger>
+        </div>
+
+        <div className="downbtnrow container-fluid">
+          <Button
+            variant="light"
+            className="menubtn1"
+            onClick={() => {
               this.resetGrid1();
-             }}> Reset </Button>
-               <Button variant="light"  className="menubtn1"  onClick={()=> {
+            }}
+          >
+            {" "}
+            Reset{" "}
+          </Button>
+          <Button
+            variant="light"
+            className="menubtn1"
+            onClick={() => {
               this.NewGame();
-             }}> New </Button>
-               <Button variant="light"  className="menubtn1"  onClick={()=> {
+            }}
+          >
+            {" "}
+            New{" "}
+          </Button>
+          <Button
+            variant="light"
+            className="menubtn1"
+            onClick={() => {
               this.checkGrid();
-             }}> Check </Button>
-                <Button variant="light" className="menubtn1"  onClick={()=> {
+            }}
+          >
+            {" "}
+            Check{" "}
+          </Button>
+          <Button
+            variant="light"
+            className="menubtn1"
+            onClick={() => {
               this.solveGrid();
-             }}> Solve </Button>
-              <Button variant="light" className="menubtn1"  onClick={()=> {
-              this.showHelp();
-             }}> Help </Button>
-          </div>
+            }}
+          >
+            {" "}
+            Solve{" "}
+          </Button>
 
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "help" })}
+          >
+            <Button
+              variant="light"
+              className="menubtn1"
+              onClick={() => {
+                this.showHelp();
+              }}
+            >
+              <img src={helpico} />
+            </Button>
+          </OverlayTrigger>
 
-          <Modal size="sm" show={this.state.show} onHide={this.handleClose} handleClose={this.handleClose} class="optionscr">
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "save game" })}
+          >
+            <Button
+              variant="light"
+              className="menubtn1"
+              onClick={() => {
+                this.saveGame();
+              }}
+            >
+              <img src={saveico} />
+            </Button>
+          </OverlayTrigger>
+        </div>
+
+        <Modal
+          size="sm"
+          show={this.state.show}
+          onHide={this.handleClose}
+          handleClose={this.handleClose}
+          class="optionscr"
+        >
           <Modal.Header closeButton>
-          <Modal.Title>Fill</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        <Container>
-          <Row className="justify-content-sm-center">
-              <div className="renderSq">
-            <Button variant="light"  className="inputBtn" 
-            onClick={()=> { 
-                this.setValueSqr(1);
-              this.handleClose(); }}>1</Button>
-               <Button variant="light"  className="inputBtn" 
-            onClick={()=> {  this.setValueSqr(2);
-            this.handleClose(); }}>2</Button>
-               <Button variant="light"  className="inputBtn" 
-            onClick={()=> {  this.setValueSqr(3);
-            this.handleClose(); }}>3</Button></div>
-    </Row><Row className="justify-content-md-center"> 
-           <div className="renderSq">
-            <Button variant="light"  className="inputBtn" 
-            onClick={()=> {  this.setValueSqr(4);
-            this.handleClose(); }}>4</Button>
-               <Button variant="light"  className="inputBtn" 
-            onClick={()=> { this.setValueSqr(5);
-            this.handleClose(); }}>5</Button>
-               <Button variant="light"  className="inputBtn" 
-            onClick={()=> {  this.setValueSqr(6);
-            this.handleClose(); }}>6</Button></div>
-    </Row><Row className="justify-content-md-center"> 
-          <div className="renderSq">
-            <Button variant="light"  className="inputBtn" 
-            onClick={()=> {  this.setValueSqr(7);
-            this.handleClose(); }}>7</Button>
-               <Button variant="light"  className="inputBtn" 
-            onClick={()=> {  this.setValueSqr(8);
-            this.handleClose(); }}>8</Button>
-               <Button variant="light"  className="inputBtn" 
-            onClick={()=> { this.setValueSqr(9);
-            this.handleClose();
-              }}>9</Button></div>
-    </Row><Row className="justify-content-md-center"> 
+            <Modal.Title>Fill</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Container>
+              <Row className="justify-content-sm-center">
                 <div className="renderSq">
-            <Button variant="light"  
-            onClick={()=> {  this.setValueSqr(" ");
-            this.handleClose(); }}>Clear</Button>
-            </div>
-            </Row>
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(1);
+                      this.handleClose();
+                    }}
+                  >
+                    1
+                  </Button>
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(2);
+                      this.handleClose();
+                    }}
+                  >
+                    2
+                  </Button>
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(3);
+                      this.handleClose();
+                    }}
+                  >
+                    3
+                  </Button>
+                </div>
+              </Row>
+              <Row className="justify-content-md-center">
+                <div className="renderSq">
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(4);
+                      this.handleClose();
+                    }}
+                  >
+                    4
+                  </Button>
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(5);
+                      this.handleClose();
+                    }}
+                  >
+                    5
+                  </Button>
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(6);
+                      this.handleClose();
+                    }}
+                  >
+                    6
+                  </Button>
+                </div>
+              </Row>
+              <Row className="justify-content-md-center">
+                <div className="renderSq">
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(7);
+                      this.handleClose();
+                    }}
+                  >
+                    7
+                  </Button>
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(8);
+                      this.handleClose();
+                    }}
+                  >
+                    8
+                  </Button>
+                  <Button
+                    variant="light"
+                    className="inputBtn"
+                    onClick={() => {
+                      this.setValueSqr(9);
+                      this.handleClose();
+                    }}
+                  >
+                    9
+                  </Button>
+                </div>
+              </Row>
+              <Row className="justify-content-md-center">
+                <div className="renderSq">
+                  <Button
+                    variant="light"
+                    onClick={() => {
+                      this.setValueSqr(" ");
+                      this.handleClose();
+                    }}
+                  >
+                    Clear
+                  </Button>
+                </div>
+              </Row>
             </Container>
           </Modal.Body>
-          </Modal>
+        </Modal>
 
-        
-          <Modal show={this.state.showNewMode} onHide={this.handleClose} handleokbtn={this.handleokbtn} windtype="difficulty">
+        <Modal
+          show={this.state.showNewMode}
+          onHide={this.handleClose}
+          handleokbtn={this.handleokbtn}
+          windtype="difficulty"
+        >
           <Modal.Header closeButton>
-          <Modal.Title>Choose Difficulty level</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-              <label>Choose a level</label>
-                <select id="difficulty"  onChange={this.handleChange} className="SelectOption">
-                <option value="" defaultValue></option>
-                <option value="easy" defaultValue>Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-                </select>
-                </Modal.Body>
-                <Modal.Footer>
-                <Button variant="light" className="inputBtn" 
-            onClick={this.handleClose}>OK</Button>
-            </Modal.Footer>
-          </Modal>
+            <Modal.Title>Choose Difficulty level</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <label>Choose a level</label>
+            <select
+              id="difficulty"
+              onChange={this.handleChange}
+              className="SelectOption"
+            >
+              <option value="" defaultValue></option>
+              <option value="easy" defaultValue>
+                Easy
+              </option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="light"
+              className="inputBtn"
+              onClick={this.handleClose}
+            >
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-          <Modal show={this.state.showHelpMenu} onHide={this.handleClose} handleokbtn={this.handleokbtn}>
-            <Modal.Header closeButton>
-              <Modal.Title>Sudoku Help</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Modal
+          show={this.state.showHelpMenu}
+          onHide={this.handleClose}
+          handleokbtn={this.handleokbtn}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Sudoku Help</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
               <h4>Reset</h4>
               <p>Will reset the grid, you will loose all your data</p>
               <h4>Check</h4>
               <p>Will turn a box red if entry is incorrect (x)</p>
               <h4>Solve</h4>
               <p>Will solve the puzzle</p>
-            </Modal.Body>
-          </Modal>
-          </main>
-        )
-    }
+              <h4>Save</h4>
+              <p>Will save the game</p>
+            </div>
+          </Modal.Body>
+        </Modal>
+
+        <Modal
+          show={this.state.showtip}
+          onHide={this.handleClose}
+          handleokbtn={this.handleokbtn}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Tips</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Tipshow />
+          </Modal.Body>
+        </Modal>
+      </main>
+    );
+  }
 }

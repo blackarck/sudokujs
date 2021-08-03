@@ -1,21 +1,94 @@
-import React from 'react'
-import './App.css';
+import React, { Component, useState, useEffect } from "react";
+import "./css/App.css";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import firebase from "firebase/app";
+import dotenv from "dotenv";
+import usermodel from "./data/user";
+import loginsrvc from "./loginsrvc";
 
- /***************
+dotenv.config();
+
+/***************
  * developer: Vivek Sharma
  * date : 17-jun-21
  * for sudoky program
  ***************/
 
-const Appheader = () => {
-    return (
-        <div>
-           
-            <div className="App-header">
-                Sudoku 
-            </div>
-        </div>
-    )
-}
+export default class Appheader extends Component {
+  loginService = new loginsrvc();
 
-export default Appheader
+  constructor(props) {
+    dotenv.config();
+
+    super(props);
+    this.state = {
+      showlogin: true,
+      showlogout: false,
+    };
+  } //end of constructor
+
+  setLoginBtnStateOn = () => {
+    this.setState({ showlogin: true });
+  };
+  setLoginBtnStateOff = () => {
+    this.setState({ showlogin: false });
+  };
+
+  retButton = () => {
+    //return login button if this.state.showlogin is true else return logout button
+    //console.log("Return button is " + this.loginService.isloggedin);
+    if (!this.loginService.getIsLogin()) {
+      return (
+        <Button
+          variant="outline-light"
+          className="logbtn"
+          size="md"
+          onClick={() => {
+            this.loginService.glogin().then(() => {
+              this.setLoginBtnStateOff();
+            });
+          }}
+        >
+          login
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          variant="outline-light"
+          className="logbtn"
+          size="md"
+          onClick={() => {
+            this.loginService.glogout().then(() => {
+              this.setLoginBtnStateOn();
+            });
+          }}
+        >
+          logout
+        </Button>
+      );
+    }
+  }; // end of retbutton
+
+  render() {
+    return (
+      <div>
+        <div className="App-header">
+          <Container>
+            <Row className="justify-content-md-center">
+              <Col xs={7} md={10} sm={11} className="App-header">
+                Sudoku
+              </Col>
+              <Col className="App-header-login">
+                <Row className="justify-content-md-end">{this.retButton()}</Row>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </div>
+    );
+  }
+}

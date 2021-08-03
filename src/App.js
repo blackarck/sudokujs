@@ -1,60 +1,75 @@
- import './App.css';
- import Appheader from './Appheader';
- import React from 'react';
- import SudClassVw from './SudClassVw';
- import About from './About';
- import Navin from './Nav';
- import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
- import Container from 'react-bootstrap/Container'
- import Row from 'react-bootstrap/Row';
- import Col from 'react-bootstrap/Col';
- //import {queryString,location} from 'query-string';
- import firebase from "firebase/app";
- import "firebase/auth";
- import {
+import "./css/App.css";
+import Appheader from "./Appheader";
+import React, { Component } from "react";
+import SudClassVw from "./SudClassVw";
+import About from "./About";
+import Navin from "./Nav";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+//import {queryString,location} from 'query-string';
+import firebase from "firebase/app";
+import "firebase/auth";
+import {
   FirebaseAuthProvider,
   FirebaseAuthConsumer,
   IfFirebaseAuthed,
-  IfFirebaseAuthedAnd
+  IfFirebaseAuthedAnd,
 } from "@react-firebase/auth";
-import config from './fireconfig';
+import config from "./fireconfig";
+import loginsrvc from "./loginsrvc";
 
- const queryString = require('query-string');
- /***************
+const queryString = require("query-string");
+/***************
  * developer: Vivek Sharma
  * date : 17-jun-21
  * for sudoky program
  ***************/
- 
 
-function App() {
-   const parsed = queryString.parse(window.location.search);
-   //console.log("Parse value-"+parsed.val);
-  
-  var showmenu=true;
-  if(parsed.val==="nshowmenu"){
-    showmenu=false;
-   // console.log("Showmenu is false");
-  }
+//function App() {
+export default class App extends Component {
+  showmenu = true;
+  loginSrvc = new loginsrvc();
 
-   return (
+  constructor(props) {
+    super(props);
+    const parsed = queryString.parse(window.location.search);
+    //console.log("Parse value-"+parsed.val);
 
-    <Router>
-     <Appheader/>
-     <Container fluid><Row>
-       <Col md="3">
-      {showmenu && <Navin/>}
-      </Col>
-      <Col md="auto">
-      <Switch>
-      <Route path="/about" component={About}/>
-      <Route path="/sudoku" component={SudClassVw}/>
-      <Route path="/" component={SudClassVw}/>
-      </Switch></Col>
-      </Row>
-      </Container>
-    </Router>
-  );
+    if (parsed.val === "nshowmenu") {
+      this.showmenu = false;
+      // console.log("Showmenu is false");
+    }
+  } //end of constructor
+
+  render() {
+    return (
+      <FirebaseAuthProvider firebase={firebase} {...config}>
+        <Router>
+          <Appheader />
+          <Container fluid>
+            <Row>
+              <Col md="3">{this.showmenu && <Navin />}</Col>
+              <Col md="auto">
+                <Switch>
+                  <Route path="/about">
+                    <About />
+                  </Route>
+                  <Route path="/sudoku">
+                    <SudClassVw />
+                  </Route>
+                  <Route path="/">
+                    <SudClassVw />
+                  </Route>
+                </Switch>
+              </Col>
+            </Row>
+          </Container>
+        </Router>
+      </FirebaseAuthProvider>
+    );
+  } //end of render
 }
 
-export default App;
+//export default App;
