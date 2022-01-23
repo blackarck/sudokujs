@@ -86,7 +86,7 @@ export default class About extends Component {
               </tr>
               <tr>
                 <td>Back End</td>
-                <td>None</td>
+                <td>nodejs server with mysql DB</td>
               </tr>
               <tr>
                 <td>Hosting</td>

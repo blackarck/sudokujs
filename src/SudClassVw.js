@@ -14,6 +14,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tipshow from "./tipshow";
@@ -22,6 +23,7 @@ import helpico from "./img/helpico.svg";
 import clearico from "./img/clearico.svg";
 import loginsrvc from "./loginsrvc";
 import gamesrvc from "./gamesrvc";
+import upload from "./img/upload.svg";
 /***************
  * developer: Vivek Sharma
  * date : 17-jun-21
@@ -31,6 +33,8 @@ import gamesrvc from "./gamesrvc";
 export default class SudClassVw extends Component {
   islogin = false;
   gameService = new gamesrvc();
+  showgamearr = [];
+
   constructor(props) {
     super(props);
     fillsudokuarr();
@@ -44,6 +48,7 @@ export default class SudClassVw extends Component {
       show: false,
       showNewMode: false,
       showHelpMenu: false,
+      showLoadMenu: false,
       iclick: 0,
       jclick: 0,
       selectedval: "easy",
@@ -117,6 +122,7 @@ export default class SudClassVw extends Component {
       showNewMode: false,
       showHelpMenu: false,
       showtip: false,
+      showLoadMenu: false,
     });
   };
 
@@ -223,7 +229,8 @@ export default class SudClassVw extends Component {
       let gamedata = {
         currentstate: this.state.sudoarr,
         completestate: this.state.fullsudokuarr,
-        hiddenstate: hiddenSudokuclone,
+        //hiddenstate: hiddenSudokuclone,
+        hiddenstate: this.state.hidsudoarr,
         gameid: this.state.gameid,
       };
       this.gameService.savegame(gamedata).then((res) => {
@@ -236,9 +243,73 @@ export default class SudClassVw extends Component {
     //save the game
   };
 
+  getShowGames = () => {
+    let rowsarr = [];
+    for (let i = 0; i < this.showgamearr.length; i++) {
+      rowsarr.push(
+        <Row className="showgamescr">
+          <Col>{this.showgamearr[i].id}</Col>
+          <Col>{this.showgamearr[i].createdtime}</Col>
+          <Col>
+            {" "}
+            <Button
+              variant="light"
+              className="menuLoadBtn"
+              size="sm"
+              onClick={() => {
+                this.loadSelGame(i);
+                this.handleClose();
+              }}
+            >
+              Load
+            </Button>{" "}
+          </Col>
+        </Row>
+      );
+    }
+    return (
+      <div>
+        <Container>{rowsarr}</Container>
+      </div>
+    );
+  }; //end of getShowGames
+
+  showGame = () => {
+    //show all games for this user
+    this.showgamearr = "";
+    this.gameService.showAllGames().then((res) => {
+      //console.log("res for showgames is " + JSON.stringify(res));
+      if (res) {
+        console.log("length of res is " + res.length);
+        this.showgamearr = res;
+        console.log(
+          "ID - " +
+            this.showgamearr[0].id +
+            " Created on " +
+            this.showgamearr[0].createdtime
+        );
+        this.setState({ showLoadMenu: true });
+      }
+    });
+  };
+
+  loadSelGame = (i) => {
+    var sudoarr2d = this.process2darr(this.showgamearr[i].gstate);
+    var harr2d = this.process2darr(this.showgamearr[i].hstate);
+    var carr2d = this.process2darr(this.showgamearr[i].cstate);
+
+    console.log("coming here " + harr2d);
+    this.setState({
+      sudoarr: sudoarr2d,
+      gameid: this.showgamearr[i].id,
+      hidsudoarr: harr2d,
+      fullsudokuarr: carr2d,
+    });
+  };
+
   loadgame = (gameid) => {
     this.gameService.loadgame(gameid).then((res) => {
-      console.log("gstate is " + this.process2darr(res[0].gstate));
+      //console.log("gstate is " + this.process2darr(res[0].gstate));
       var sudoarr2d = this.process2darr(res[0].gstate);
       var harr2d = this.process2darr(res[0].hstate);
       var carr2d = this.process2darr(res[0].cstate);
@@ -553,6 +624,22 @@ export default class SudClassVw extends Component {
               <img src={saveico} />
             </Button>
           </OverlayTrigger>
+
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "load game" })}
+          >
+            <Button
+              variant="light"
+              className="menubtn1"
+              onClick={() => {
+                this.showGame();
+              }}
+            >
+              <img src={upload} />
+            </Button>
+          </OverlayTrigger>
         </div>
 
         <Modal
@@ -732,13 +819,13 @@ export default class SudClassVw extends Component {
           <Modal.Body>
             <div>
               <h4>Reset</h4>
-              <p>Will reset the grid, you will loose all your data</p>
+              <p>Will reset the grid. Will erase all entries !</p>
               <h4>Check</h4>
-              <p>Will turn a box red if entry is incorrect (x)</p>
+              <p>Will turn incorrect entry red (x)</p>
               <h4>Solve</h4>
               <p>Will solve the puzzle</p>
               <h4>Save</h4>
-              <p>Will save the game</p>
+              <p>Will save the game, if logged in</p>
             </div>
           </Modal.Body>
         </Modal>
@@ -753,6 +840,20 @@ export default class SudClassVw extends Component {
           </Modal.Header>
           <Modal.Body>
             <Tipshow />
+          </Modal.Body>
+        </Modal>
+
+        <Modal
+          show={this.state.showLoadMenu}
+          onHide={this.handleClose}
+          handleokbtn={this.handleokbtn}
+          windtype="showgame"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Load Save Game</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>{this.getShowGames()}</div>
           </Modal.Body>
         </Modal>
       </main>

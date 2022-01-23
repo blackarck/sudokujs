@@ -55,6 +55,10 @@ main {
   color: white;
 }
 
+.loginuser {
+  display: flex;
+  font-size: calc(2px + 2vmin);
+}
 .navlinks {
   color: rgb(27, 27, 27);
 }
@@ -166,6 +170,20 @@ main {
   background-color: rgb(241, 226, 202);
   border: none;
   vertical-align: bottom;
+}
+
+.showgamescr {
+  font-size: 12px;
+}
+.LoadBtn {
+  height: 30px;
+  width: 70px;
+}
+
+.menuLoadBtn {
+  vertical-align: top;
+  height: 25px;
+  margin-bottom: 10px;
 }
 
 .MenuBtn:hover {

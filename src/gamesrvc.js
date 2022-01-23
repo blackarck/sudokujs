@@ -66,4 +66,28 @@ export default class gamesrvc {
       }); //end of promise
     }); //end of getuseridtoken
   }; //end of fetch result
+
+  showAllGames = async () => {
+    return new Promise((resolve, reject) => {
+      this.getUserIDToken()?.then((restoken) => {
+        // console.log("restoken is "+restoken);
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT",
+            authorization: restoken,
+          },
+        };
+
+        fetch("https://localhost:3000/api/user/showgames", requestOptions)
+          .then((data) => data.json())
+          .then((result) => {
+            //console.log("loaded game is " + JSON.stringify(result));
+            resolve(result);
+          });
+      }); //end of getidtoken
+    }); //end of promise
+  }; //end of showallgames
 } // end of gamesrvc class

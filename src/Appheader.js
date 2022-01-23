@@ -27,7 +27,9 @@ export default class Appheader extends Component {
     this.state = {
       showlogin: true,
       showlogout: false,
+      username: "",
     };
+    this.setState({ username: this.loginService.userdata.displayname });
   } //end of constructor
 
   setLoginBtnStateOn = () => {
@@ -35,6 +37,13 @@ export default class Appheader extends Component {
   };
   setLoginBtnStateOff = () => {
     this.setState({ showlogin: false });
+  };
+
+  retUname = () => {
+    //username
+    //console.log("local storage " + localStorage.getItem("userName"));
+    return localStorage.getItem("userName");
+    // return this.loginService.getLoginUserDtl();
   };
 
   retButton = () => {
@@ -85,6 +94,9 @@ export default class Appheader extends Component {
               <Col className="App-header-login">
                 <Row className="justify-content-md-end">{this.retButton()}</Row>
               </Col>
+              <div className="loginuser">
+                <Col>{this.retUname()}</Col>
+              </div>
             </Row>
           </Container>
         </div>

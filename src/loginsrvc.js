@@ -20,9 +20,8 @@ export default class loginsrvc {
       // firebase.auth().onAuthStateChanged(async(user) => {
       if (user) {
         //show logout button instead + username
-        //console.log("Auth state changed");
+        //console.log("If user");
         var r = await this.fetchResult(user);
-
         this.isloggedin = true;
         //api to send data to backend
         resolve({ success: true });
@@ -35,8 +34,9 @@ export default class loginsrvc {
           .auth()
           .signInWithPopup(googleAuthProvider)
           .then(async (user) => {
-            //console.log("result is user "+ JSON.stringify(user));
-            await this.fetchResult(user);
+            //console.log("result is user " + JSON.stringify(user));
+            var usernm = firebase.auth().currentUser;
+            await this.fetchResult(usernm);
             this.isloggedin = true;
             resolve({ success: true });
           });
@@ -51,19 +51,25 @@ export default class loginsrvc {
   }
 
   getLoginUserDtl() {
-    var userdtls = new usermodel();
-    userdtls = localStorage.getItem("userdata");
+    var userdtls = localStorage.getItem("userName");
+    //console.log("fetched data for " + userdtls.displayname);
     return userdtls;
   }
 
   fetchResult = async (user) => {
     return new Promise((resolve, reject) => {
-      //console.log("user is " + JSON.stringify(user));
+      //console.log("user is " + " " + user.displayName);
+
       var userdata = new usermodel();
       userdata.displayname = user.displayName;
       userdata.emailid = user.email;
       userdata.userid = user.uid;
       userdata.photourl = user.photoURL;
+
+      //console.log("Setting " + userdata.displayname);
+      localStorage.setItem("userdata", userdata);
+      localStorage.setItem("userName", userdata.displayname);
+      localStorage.setItem("loginstate", true);
 
       this.getUserIDToken()?.then((restoken) => {
         // console.log("restoken is "+restoken);
@@ -81,9 +87,12 @@ export default class loginsrvc {
         fetch("https://localhost:3000/api/user/login", requestOptions)
           .then((data) => data.json())
           .then((result) => {
-            console.log("res is " + JSON.stringify(result));
-            localStorage.setItem("userdata", userdata);
-            localStorage.setItem("loginstate", true);
+            // console.log(
+            //   "res is " + JSON.stringify(result) + " for" + userdata.displayname
+            // );
+            // console.log("Setting local storage");
+
+            //console.log("uname3 is " + localStorage.getItem("userName"));
             resolve(result);
           });
       }); //end of promise
