@@ -1,12 +1,10 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component } from "react";
 import "./css/App.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import firebase from "firebase/app";
 import dotenv from "dotenv";
-import usermodel from "./data/user";
 import loginsrvc from "./loginsrvc";
 
 dotenv.config();

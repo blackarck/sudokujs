@@ -1,7 +1,18 @@
 import firebase from "firebase/app";
+import { io } from "socket.io-client";
 
 export default class gamesrvc {
-  constructor() {}
+  socket=io("https://localhost:3000/");
+  constructor() {
+  console.log("Initialize game service ");
+
+    this.socket.on('handshake',()=>{
+    console.log("Handshake from server");
+   });
+
+   console.log("Post handshake");
+
+  }
 
   getUserIDToken() {
     return firebase.auth().currentUser?.getIdToken(true);
@@ -90,4 +101,8 @@ export default class gamesrvc {
       }); //end of getidtoken
     }); //end of promise
   }; //end of showallgames
+
+  sendSocketMsg(){
+
+  }
 } // end of gamesrvc class

@@ -21,7 +21,7 @@ export default class loginsrvc {
       if (user) {
         //show logout button instead + username
         //console.log("If user");
-        var r = await this.fetchResult(user);
+        await this.fetchResult(user);
         this.isloggedin = true;
         //api to send data to backend
         resolve({ success: true });
@@ -113,4 +113,30 @@ export default class loginsrvc {
         });
     }); //end of promise
   };
+
+  startMultiGame = async() => {
+    return new Promise((resolve, reject) => {
+      this.getUserIDToken()?.then((restoken) => {
+
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT",
+            authorization: restoken,
+          },
+         // body: {"data":"This is payload"},
+        };
+        fetch("https://localhost:3000/api/multigm/startmulti", requestOptions)
+        .then((data) => data.json())
+        .then((result) => {
+          resolve(result);
+        });
+      });//end of getuseridtoken
+
+    });//end of promise
+  }
+
 } //end of loginsrvc class
+

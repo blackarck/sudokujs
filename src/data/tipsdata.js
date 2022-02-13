@@ -2,15 +2,15 @@
 var tipsdata = [
   {
     tipnum: "1",
-    tip: "Login to store your time and view your stats",
+    tip: "Login, to save game & view your stats",
   },
   {
     tipnum: "2",
-    tip: "Pressing check button will show you wrong entries in red",
+    tip: "Check button will show you wrong entries in red",
   },
   {
     tipnum: "3",
-    tip: "Open sudoku in mobile for a flex mobile experience",
+    tip: "Multiplater competitive game is available",
   },
   {
     tipnum: "4",
@@ -18,11 +18,11 @@ var tipsdata = [
   },
   {
     tipnum: "5",
-    tip: "this project is open source visit git site to see the code",
+    tip: "this project is open source, git link in about page",
   },
   {
     tipnum: "6",
-    tip: "Click on save to save your game ",
+    tip: "Game state can be saved",
   },
 ];
 

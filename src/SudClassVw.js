@@ -24,6 +24,7 @@ import clearico from "./img/clearico.svg";
 import loginsrvc from "./loginsrvc";
 import gamesrvc from "./gamesrvc";
 import upload from "./img/upload.svg";
+import multiplayer from "./img/multipl.svg"
 /***************
  * developer: Vivek Sharma
  * date : 17-jun-21
@@ -292,6 +293,13 @@ export default class SudClassVw extends Component {
       }
     });
   };
+
+  multiStart = () => {
+    var loginService = new loginsrvc();
+    loginService.startMultiGame().then((data)=>{
+      console.log("rcvd res"+ JSON.stringify(data));
+    })
+  }//end of multistart
 
   loadSelGame = (i) => {
     var sudoarr2d = this.process2darr(this.showgamearr[i].gstate);
@@ -640,6 +648,24 @@ export default class SudClassVw extends Component {
               <img src={upload} />
             </Button>
           </OverlayTrigger>
+
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "start multiplayer" })}
+          >
+            <Button
+              variant="light"
+              className="menubtn1"
+              onClick={() => {
+                this.multiStart();
+              }}
+            >
+              <img src={multiplayer} />
+            </Button>
+          </OverlayTrigger>
+
+
         </div>
 
         <Modal
@@ -647,7 +673,7 @@ export default class SudClassVw extends Component {
           show={this.state.show}
           onHide={this.handleClose}
           handleClose={this.handleClose}
-          class="optionscr"
+          className="optionscr"
         >
           <Modal.Header closeButton>
             <Modal.Title>Fill</Modal.Title>

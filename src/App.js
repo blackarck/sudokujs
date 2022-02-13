@@ -13,9 +13,6 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import {
   FirebaseAuthProvider,
-  FirebaseAuthConsumer,
-  IfFirebaseAuthed,
-  IfFirebaseAuthedAnd,
 } from "@react-firebase/auth";
 import config from "./fireconfig";
 import loginsrvc from "./loginsrvc";
