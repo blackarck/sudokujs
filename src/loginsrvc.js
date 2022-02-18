@@ -1,11 +1,18 @@
 import usermodel from "./data/user";
 import firebase from "firebase/app";
+import dotenv from "dotenv";
+
+
+
 
 export default class loginsrvc {
   userdata;
   isloggedin = false;
 
   constructor() {
+    console.log(require("dotenv").config())
+    dotenv.config();
+
     this.userdata = new usermodel();
   }
 
@@ -83,8 +90,9 @@ export default class loginsrvc {
           },
           body: JSON.stringify(userdata),
         };
+        console.log("Calling url "+ JSON.stringify(process.env));
 
-        fetch("https://localhost:3000/api/user/login", requestOptions)
+        fetch(process.env.REACT_APP_CALLURL+"/api/user/login", requestOptions)
           .then((data) => data.json())
           .then((result) => {
             // console.log(
@@ -126,9 +134,9 @@ export default class loginsrvc {
             "Access-Control-Allow-Methods": "GET, POST, PUT",
             authorization: restoken,
           },
-         // body: {"data":"This is payload"},
+          // body: JSON.stringify({"data":"This is payload"}),
         };
-        fetch("https://localhost:3000/api/multigm/startmulti", requestOptions)
+        fetch(process.env.REACT_APP_CALLURL+"/api/multigm/startmgm", requestOptions)
         .then((data) => data.json())
         .then((result) => {
           resolve(result);

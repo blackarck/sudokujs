@@ -1,15 +1,21 @@
 import firebase from "firebase/app";
 import { io } from "socket.io-client";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 export default class gamesrvc {
-  socket=io("https://localhost:3000/");
-  constructor() {
-  console.log("Initialize game service ");
 
+  //socket=io("https://localhost:3000/");
+  constructor() {
+  console.log("Initialize game service "+ process.env.CALLURL);
+
+  /*
     this.socket.on('handshake',()=>{
     console.log("Handshake from server");
    });
-
+*/
    console.log("Post handshake");
 
   }
@@ -40,7 +46,7 @@ export default class gamesrvc {
           body: JSON.stringify(datatosend),
         };
 
-        fetch("https://localhost:3000/api/user/savegame", requestOptions)
+        fetch(process.env.REACT_APP_CALLURL+"/api/user/savegame", requestOptions)
           .then((data) => data.json())
           .then((result) => {
             //console.log("res is " + JSON.stringify(result));
@@ -68,7 +74,7 @@ export default class gamesrvc {
           params: { gid: gameid },
         };
 
-        fetch("https://localhost:3000/api/user/loadgame", requestOptions)
+        fetch(process.env.REACT_APP_CALLURL+"/api/user/loadgame", requestOptions)
           .then((data) => data.json())
           .then((result) => {
             // console.log("loaded game is " + JSON.stringify(result));
@@ -92,7 +98,7 @@ export default class gamesrvc {
           },
         };
 
-        fetch("https://localhost:3000/api/user/showgames", requestOptions)
+        fetch(process.env.REACT_APP_CALLURL+"/api/user/showgames", requestOptions)
           .then((data) => data.json())
           .then((result) => {
             //console.log("loaded game is " + JSON.stringify(result));
