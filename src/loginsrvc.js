@@ -10,7 +10,7 @@ export default class loginsrvc {
   isloggedin = false;
 
   constructor() {
-    console.log(require("dotenv").config())
+    //console.log(require("dotenv").config())
     dotenv.config();
 
     this.userdata = new usermodel();

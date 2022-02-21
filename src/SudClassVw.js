@@ -8,7 +8,6 @@ import {
   hiddenSudokuclone,
 } from "./sudokucode";
 import "./css/App.css";
-import ModalWind from "./ModalWind";
 import Square from "./Square";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -24,7 +23,9 @@ import clearico from "./img/clearico.svg";
 import loginsrvc from "./loginsrvc";
 import gamesrvc from "./gamesrvc";
 import upload from "./img/upload.svg";
-import multiplayer from "./img/multipl.svg"
+import multiplayer from "./img/multipl.svg";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 /***************
  * developer: Vivek Sharma
  * date : 17-jun-21
@@ -42,6 +43,7 @@ export default class SudClassVw extends Component {
     hideSudoku(2);
     this.islogin = localStorage.getItem("loginstate") || false;
     //calculate hidden sudoku puzzle and define initial puzzle
+    //console.log("Check is user is logged in " + this.islogin);
     this.state = {
       sudoarr: hiddenSudokuarr,
       hidsudoarr: hiddenSudokuclone,
@@ -57,11 +59,40 @@ export default class SudClassVw extends Component {
       showtip: true,
       showsave: localStorage.getItem("loginstate"),
       gameid: "",
+      showMultibtn :localStorage.getItem("loginstate") ,
+      gameStarted: false,
     };
-  }
+    
+   }//end of constructor
 
   NewGame = () => {
-    this.setState({ showNewMode: true });
+    console.log("Showing the prompt");
+
+    if (this.state.gameStarted){
+      //show the prompt
+      confirmAlert({
+        title: 'Confirm game start',
+        message: 'Are you sure you want to start a new game',
+        buttons: [
+          {
+            label: 'Yes',
+            onClick: () => {
+              this.setState({ showNewMode: true ,
+                gameStarted: true});
+              
+            }
+          },
+          {
+            label: 'No',
+            onClick: () => {//do nothing
+            }
+          }
+        ]
+      });
+    }else{
+    this.setState({ showNewMode: true ,
+      gameStarted: true});
+    }
   };
 
   resetGrid1 = () => {
@@ -176,6 +207,7 @@ export default class SudClassVw extends Component {
       sudoarr: hiddenSudokuarr,
       hidsudoarr: hiddenSudokuarr,
       fullsudokuarr: sudokuarr,
+      gameStarted :  true,
     });
   };
 
@@ -277,6 +309,7 @@ export default class SudClassVw extends Component {
 
   showGame = () => {
     //show all games for this user
+    if (localStorage.getItem("loginstate")) {
     this.showgamearr = "";
     this.gameService.showAllGames().then((res) => {
       //console.log("res for showgames is " + JSON.stringify(res));
@@ -292,13 +325,20 @@ export default class SudClassVw extends Component {
         this.setState({ showLoadMenu: true });
       }
     });
+  } else {
+    alert("Have to login to save");
+  }
   };
 
   multiStart = () => {
+    if (localStorage.getItem("loginstate")) {
     var loginService = new loginsrvc();
     loginService.startMultiGame().then((data)=>{
       console.log("rcvd res"+ JSON.stringify(data));
     })
+  } else {
+    alert("Have to login to save");
+  }
   }//end of multistart
 
   loadSelGame = (i) => {
@@ -316,6 +356,7 @@ export default class SudClassVw extends Component {
   };
 
   loadgame = (gameid) => {
+    if (localStorage.getItem("loginstate")) {
     this.gameService.loadgame(gameid).then((res) => {
       //console.log("gstate is " + this.process2darr(res[0].gstate));
       var sudoarr2d = this.process2darr(res[0].gstate);
@@ -329,6 +370,9 @@ export default class SudClassVw extends Component {
         fullsudokuarr: carr2d,
       });
     }); //end of game service
+  } else {
+    alert("Have to login to save");
+  }
   }; //load new game
 
   process2darr(valstr) {
@@ -624,6 +668,7 @@ export default class SudClassVw extends Component {
           >
             <Button
               variant="light"
+              disabled={this.state.showsave}
               className="menubtn1"
               onClick={() => {
                 this.saveGame();
@@ -641,6 +686,7 @@ export default class SudClassVw extends Component {
             <Button
               variant="light"
               className="menubtn1"
+              disabled={this.state.showsave}
               onClick={() => {
                 this.showGame();
               }}
@@ -657,6 +703,7 @@ export default class SudClassVw extends Component {
             <Button
               variant="light"
               className="menubtn1"
+              
               onClick={() => {
                 this.multiStart();
               }}
