@@ -34,7 +34,8 @@ export default class Appheader extends Component {
     this.setState({ showlogin: true });
   };
   setLoginBtnStateOff = () => {
-    this.setState({ showlogin: false });
+    this.setState({ showlogin: false,
+                    username: "" });
   };
 
   retUname = () => {

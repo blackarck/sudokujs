@@ -64,14 +64,14 @@ export default class gamesrvc {
       this.getUserIDToken()?.then((restoken) => {
         // console.log("restoken is "+restoken);
         const requestOptions = {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, POST, PUT",
             authorization: restoken,
           },
-          params: { gid: gameid },
+          body: JSON.stringify({ gid: gameid }),
         };
 
         fetch(process.env.REACT_APP_CALLURL+"/api/user/loadgame", requestOptions)
@@ -83,6 +83,30 @@ export default class gamesrvc {
       }); //end of promise
     }); //end of getuseridtoken
   }; //end of fetch result
+
+  delGame = async (gameid) => {
+    return new Promise((resolve, reject) => {
+      this.getUserIDToken()?.then((restoken) => {
+        // console.log("restoken is "+restoken + " ,gameid "+gameid);
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT",
+            authorization: restoken,
+          },
+          body: JSON.stringify( { gid: gameid }),
+        };
+        fetch(process.env.REACT_APP_CALLURL+"/api/user/delgame", requestOptions)
+        .then((data) => data.json())
+        .then((result) => {
+          // console.log("loaded game is " + JSON.stringify(result));
+          resolve(result);
+        });
+      });//end of getuseridtoken
+    });//end of promise
+  }//end of delgame
 
   showAllGames = async () => {
     return new Promise((resolve, reject) => {

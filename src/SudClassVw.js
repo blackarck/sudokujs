@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
-  printSudoku,
-  sudokuarr,
+   sudokuarr,
   fillsudokuarr,
   hideSudoku,
   hiddenSudokuarr,
@@ -20,6 +19,7 @@ import Tipshow from "./tipshow";
 import saveico from "./img/saveico.svg";
 import helpico from "./img/helpico.svg";
 import clearico from "./img/clearico.svg";
+import deleteico from "./img/deleteico.svg";
 import loginsrvc from "./loginsrvc";
 import gamesrvc from "./gamesrvc";
 import upload from "./img/upload.svg";
@@ -60,7 +60,7 @@ export default class SudClassVw extends Component {
       showsave: localStorage.getItem("loginstate"),
       gameid: "",
       showMultibtn :localStorage.getItem("loginstate") ,
-      gameStarted: false,
+      gameStarted: true,
     };
     
    }//end of constructor
@@ -205,7 +205,7 @@ export default class SudClassVw extends Component {
     this.setState({
       gameid: "",
       sudoarr: hiddenSudokuarr,
-      hidsudoarr: hiddenSudokuarr,
+      hidsudoarr: hiddenSudokuclone,
       fullsudokuarr: sudokuarr,
       gameStarted :  true,
     });
@@ -297,6 +297,21 @@ export default class SudClassVw extends Component {
               Load
             </Button>{" "}
           </Col>
+          <Col>
+            {" "}
+            <Button
+              variant="light"
+              className="menuLoadBtn"
+              size="sm"
+              onClick={() => {
+                //alert("Game id is "+ this.showgamearr[i].id);
+                this.delSelGame(this.showgamearr[i].id);
+                this.handleClose();
+              }}
+            >
+               <img src={deleteico} />
+            </Button>{" "}
+          </Col>
         </Row>
       );
     }
@@ -354,6 +369,13 @@ export default class SudClassVw extends Component {
       fullsudokuarr: carr2d,
     });
   };
+
+  delSelGame = (i) => {
+     //alert("passing along "+i);
+    this.gameService.delGame(i).then((res)=>{
+
+    });//end of gameservice
+  };//end of delselgame
 
   loadgame = (gameid) => {
     if (localStorage.getItem("loginstate")) {
@@ -668,7 +690,7 @@ export default class SudClassVw extends Component {
           >
             <Button
               variant="light"
-              disabled={this.state.showsave}
+              //disabled={this.state.showsave}
               className="menubtn1"
               onClick={() => {
                 this.saveGame();
@@ -686,7 +708,7 @@ export default class SudClassVw extends Component {
             <Button
               variant="light"
               className="menubtn1"
-              disabled={this.state.showsave}
+             // disabled={this.state.showsave}
               onClick={() => {
                 this.showGame();
               }}
@@ -923,7 +945,7 @@ export default class SudClassVw extends Component {
           windtype="showgame"
         >
           <Modal.Header closeButton>
-            <Modal.Title>Load Save Game</Modal.Title>
+            <Modal.Title>Saved Games</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>{this.getShowGames()}</div>

@@ -136,7 +136,7 @@ export default class loginsrvc {
           },
           // body: JSON.stringify({"data":"This is payload"}),
         };
-        fetch(process.env.REACT_APP_CALLURL+"/api/multigm/startmgm", requestOptions)
+        fetch(process.env.REACT_APP_CALLURL+"/api/multigm/startmulti", requestOptions)
         .then((data) => data.json())
         .then((result) => {
           resolve(result);
