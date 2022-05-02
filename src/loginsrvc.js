@@ -14,6 +14,10 @@ export default class loginsrvc {
     dotenv.config();
 
     this.userdata = new usermodel();
+    if( localStorage.getItem("userdata")) {
+      this.userdata=localStorage.getItem("userdata");
+      this.isloggedin = true;
+    }
   }
 
   getIsLogin() {

@@ -218,7 +218,7 @@ export default class SudClassVw extends Component {
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         if (
-          checkArr[i][j] !== this.state.fullsudokuarr[i][j] &&
+          parseInt(checkArr[i][j]) !== parseInt(this.state.fullsudokuarr[i][j]) &&
           checkArr[i][j] !== " "
         ) {
           checkArr[i][j] = checkArr[i][j] + "x";
@@ -236,7 +236,7 @@ export default class SudClassVw extends Component {
     const checkArr = this.state.sudoarr.slice();
     outerloop: for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
-        if (checkArr[i][j] !== this.state.fullsudokuarr[i][j]) {
+        if (parseInt(checkArr[i][j]) !== parseInt(this.state.fullsudokuarr[i][j])) {
           isWon = false;
           break outerloop;
         }
