@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="16"
+   width="16"
+   version="1.1"
+   id="svg168"
+   sodipodi:docname="downloadico.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs172" />
+  <sodipodi:namedview
+     id="namedview170"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="18.1875"
+     inkscape:cx="15.972509"
+     inkscape:cy="15.972509"
+     inkscape:window-width="2560"
+     inkscape:window-height="1351"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg168" />
+  <path
+     d="M 8,12.175 3.175,7.35 4.25,6.275 l 3,3 V 0 h 1.5 v 9.275 l 3,-3 1.075,1.075 z M 1.5,16 Q 0.9,16 0.45,15.55 0,15.1 0,14.5 V 10.925 H 1.5 V 14.5 q 0,0 0,0 0,0 0,0 h 13 q 0,0 0,0 0,0 0,0 V 10.925 H 16 V 14.5 q 0,0.6 -0.45,1.05 Q 15.1,16 14.5,16 Z"
+     id="path166"
+     style="stroke-width:0.5" />
+</svg>

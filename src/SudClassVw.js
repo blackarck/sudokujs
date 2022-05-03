@@ -19,10 +19,15 @@ import Tipshow from "./tipshow";
 import saveico from "./img/saveico.svg";
 import helpico from "./img/helpico.svg";
 import clearico from "./img/clearico.svg";
+import clloadico from "./img/clloadico.svg";
 import deleteico from "./img/deleteico.svg";
+import downloadico from "./img/downloadico.svg";
+import shareico from "./img/shareico.svg";
 import loginsrvc from "./loginsrvc";
 import gamesrvc from "./gamesrvc";
 import upload from "./img/upload.svg";
+import doneico from "./img/doneico.svg";
+import restartico from "./img/restartico.svg";
 import multiplayer from "./img/multipl.svg";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -66,9 +71,7 @@ export default class SudClassVw extends Component {
    }//end of constructor
 
   NewGame = () => {
-    console.log("Showing the prompt");
-
-    if (this.state.gameStarted){
+     if (this.state.gameStarted){
       //show the prompt
       confirmAlert({
         title: 'Confirm game start',
@@ -88,7 +91,7 @@ export default class SudClassVw extends Component {
             }
           }
         ]
-      });
+      });//end of confirmalert
     }else{
     this.setState({ showNewMode: true ,
       gameStarted: true});
@@ -96,21 +99,39 @@ export default class SudClassVw extends Component {
   };
 
   resetGrid1 = () => {
-    //printSudoku(2);
-    var squarearr1 = [[]];
-    for (let i = 0; i < 9; i++) {
-      squarearr1[i] = new Array(9);
-    }
-    for (let i = 0; i < 9; i++) {
-      for (let j = 0; j < 9; j++) {
-        // squarearr1[i][j] = hiddenSudokuclone[i][j];
+     
+    confirmAlert({
+      title: 'Confirm game reset',
+      message: 'This will clear all entries, are you sure?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            var squarearr1 = [[]];
+            for (let i = 0; i < 9; i++) {
+                squarearr1[i] = new Array(9);
+              }
+            for (let i = 0; i < 9; i++) {
+              for (let j = 0; j < 9; j++) {
+                squarearr1[i][j] = this.state.hidsudoarr[i][j];
+              }
+            }
+   
+           this.setState({ sudoarr: squarearr1 });
+              }
+           },
+           {
+             label: 'No',
+              onClick: () => {//do nothing
+            }
+         }
+      ]
+    });//end of confirmalert
 
-        squarearr1[i][j] = this.state.hidsudoarr[i][j];
-      }
-    }
-    //const squarearr1 = hiddenSudokuclone.slice();
-    this.setState({ sudoarr: squarearr1 });
-  };
+   
+
+
+  };//end of resetgrid1 called by reset button
 
   showsaveOff = () => {
     console.log("Save button off ");
@@ -123,7 +144,26 @@ export default class SudClassVw extends Component {
   };
 
   solveGrid = () => {
-    this.setState({ sudoarr: this.state.fullsudokuarr });
+
+    confirmAlert({
+      title: 'Confirm solve game',
+      message: 'This will fill in all empty boxes, you might want to save your game first',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            this.setState({ sudoarr: this.state.fullsudokuarr });
+          }
+           },
+           {
+             label: 'No',
+              onClick: () => {//do nothing
+            }
+         }
+      ]
+    });//end of confirmalert
+
+    
   };
 
   renderSquare = (i, j) => {
@@ -284,25 +324,45 @@ export default class SudClassVw extends Component {
           <Col>{this.showgamearr[i].id}</Col>
           <Col>{this.showgamearr[i].createdtime}</Col>
           <Col>
-            {" "}
+            <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "Load Game" })}
+          >
             <Button
               variant="light"
-              className="menuLoadBtn"
-              size="sm"
-              onClick={() => {
+               onClick={() => {
                 this.loadSelGame(i);
                 this.handleClose();
               }}
             >
-              Load
-            </Button>{" "}
+             <img src={clloadico} />
+            </Button></OverlayTrigger>
           </Col>
-          <Col>
-            {" "}
+
+         <Col>
+         <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "Share GameID" })}
+          >
             <Button
               variant="light"
-              className="menuLoadBtn"
-              size="sm"
+              onClick={() => {
+                navigator.clipboard.writeText(this.showgamearr[i].id);
+                alert("GameID copied to clipboard. Share with a friend.")
+                this.handleClose();
+              }}
+            >
+              <img src={shareico} />
+            </Button>
+          </OverlayTrigger>
+         </Col>     
+
+          <Col>
+            <Button
+              variant="light"
+             
               onClick={() => {
                 //alert("Game id is "+ this.showgamearr[i].id);
                 this.delSelGame(this.showgamearr[i].id);
@@ -626,6 +686,12 @@ export default class SudClassVw extends Component {
         </div>
 
         <div className="downbtnrow container-fluid">
+
+        <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "reset gane" })}
+          >
           <Button
             variant="light"
             className="menubtn1"
@@ -633,9 +699,9 @@ export default class SudClassVw extends Component {
               this.resetGrid1();
             }}
           >
-            {" "}
-            Reset{" "}
+           <img src={restartico} />
           </Button>
+          </OverlayTrigger>
           <Button
             variant="light"
             className="menubtn1"
@@ -646,6 +712,12 @@ export default class SudClassVw extends Component {
             {" "}
             New{" "}
           </Button>
+
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "check entries" })}
+          >
           <Button
             variant="light"
             className="menubtn1"
@@ -653,9 +725,9 @@ export default class SudClassVw extends Component {
               this.checkGrid();
             }}
           >
-            {" "}
-            Check{" "}
+             <img src={doneico} />
           </Button>
+          </OverlayTrigger>
           <Button
             variant="light"
             className="menubtn1"
