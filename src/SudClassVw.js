@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-   sudokuarr,
+  sudokuarr,
   fillsudokuarr,
   hideSudoku,
   hiddenSudokuarr,
@@ -29,8 +29,8 @@ import upload from "./img/upload.svg";
 import doneico from "./img/doneico.svg";
 import restartico from "./img/restartico.svg";
 import multiplayer from "./img/multipl.svg";
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 /***************
  * developer: Vivek Sharma
  * date : 17-jun-21
@@ -41,6 +41,7 @@ export default class SudClassVw extends Component {
   islogin = false;
   gameService = new gamesrvc();
   showgamearr = [];
+  urlfirst = "http://localhost:4200/";
 
   constructor(props) {
     super(props);
@@ -64,74 +65,89 @@ export default class SudClassVw extends Component {
       showtip: true,
       showsave: localStorage.getItem("loginstate"),
       gameid: "",
-      showMultibtn :localStorage.getItem("loginstate") ,
+      showMultibtn: localStorage.getItem("loginstate"),
       gameStarted: true,
     };
-    
-   }//end of constructor
+
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    const paramgameid = params.get("gameid");
+
+    if (paramgameid) {
+      // alert("gameid is " + paramgameid);
+      this.gameService.loadgameID(paramgameid).then((res) => {
+        //console.log("Response of loadgameid is " + res[0].gstate);
+
+        var sudoarr2d = this.process2darr(res[0].gstate);
+        var harr2d = this.process2darr(res[0].hstate);
+        var carr2d = this.process2darr(res[0].cstate);
+
+        this.setState({
+          sudoarr: sudoarr2d,
+          gameid: paramgameid,
+          hidsudoarr: harr2d,
+          fullsudokuarr: carr2d,
+        });
+      });
+    }
+  } //end of constructor
 
   NewGame = () => {
-     if (this.state.gameStarted){
+    if (this.state.gameStarted) {
       //show the prompt
       confirmAlert({
-        title: 'Confirm game start',
-        message: 'Are you sure you want to start a new game',
+        title: "Confirm game start",
+        message: "Are you sure you want to start a new game",
         buttons: [
           {
-            label: 'Yes',
+            label: "Yes",
             onClick: () => {
-              this.setState({ showNewMode: true ,
-                gameStarted: true});
-              
-            }
+              this.setState({ showNewMode: true, gameStarted: true });
+            },
           },
           {
-            label: 'No',
-            onClick: () => {//do nothing
-            }
-          }
-        ]
-      });//end of confirmalert
-    }else{
-    this.setState({ showNewMode: true ,
-      gameStarted: true});
+            label: "No",
+            onClick: () => {
+              //do nothing
+            },
+          },
+        ],
+      }); //end of confirmalert
+    } else {
+      this.setState({ showNewMode: true, gameStarted: true });
     }
   };
 
   resetGrid1 = () => {
-     
     confirmAlert({
-      title: 'Confirm game reset',
-      message: 'This will clear all entries, are you sure?',
+      title: "Confirm game reset",
+      message: "This will clear all entries, are you sure?",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: () => {
             var squarearr1 = [[]];
             for (let i = 0; i < 9; i++) {
-                squarearr1[i] = new Array(9);
-              }
+              squarearr1[i] = new Array(9);
+            }
             for (let i = 0; i < 9; i++) {
               for (let j = 0; j < 9; j++) {
                 squarearr1[i][j] = this.state.hidsudoarr[i][j];
               }
             }
-   
-           this.setState({ sudoarr: squarearr1 });
-              }
-           },
-           {
-             label: 'No',
-              onClick: () => {//do nothing
-            }
-         }
-      ]
-    });//end of confirmalert
 
-   
-
-
-  };//end of resetgrid1 called by reset button
+            this.setState({ sudoarr: squarearr1 });
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {
+            //do nothing
+          },
+        },
+      ],
+    }); //end of confirmalert
+  }; //end of resetgrid1 called by reset button
 
   showsaveOff = () => {
     console.log("Save button off ");
@@ -144,26 +160,25 @@ export default class SudClassVw extends Component {
   };
 
   solveGrid = () => {
-
     confirmAlert({
-      title: 'Confirm solve game',
-      message: 'This will fill in all empty boxes, you might want to save your game first',
+      title: "Confirm solve game",
+      message:
+        "This will fill in all empty boxes, you might want to save your game first",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: () => {
             this.setState({ sudoarr: this.state.fullsudokuarr });
-          }
-           },
-           {
-             label: 'No',
-              onClick: () => {//do nothing
-            }
-         }
-      ]
-    });//end of confirmalert
-
-    
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {
+            //do nothing
+          },
+        },
+      ],
+    }); //end of confirmalert
   };
 
   renderSquare = (i, j) => {
@@ -247,7 +262,7 @@ export default class SudClassVw extends Component {
       sudoarr: hiddenSudokuarr,
       hidsudoarr: hiddenSudokuclone,
       fullsudokuarr: sudokuarr,
-      gameStarted :  true,
+      gameStarted: true,
     });
   };
 
@@ -258,7 +273,8 @@ export default class SudClassVw extends Component {
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         if (
-          parseInt(checkArr[i][j]) !== parseInt(this.state.fullsudokuarr[i][j]) &&
+          parseInt(checkArr[i][j]) !==
+            parseInt(this.state.fullsudokuarr[i][j]) &&
           checkArr[i][j] !== " "
         ) {
           checkArr[i][j] = checkArr[i][j] + "x";
@@ -276,7 +292,9 @@ export default class SudClassVw extends Component {
     const checkArr = this.state.sudoarr.slice();
     outerloop: for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
-        if (parseInt(checkArr[i][j]) !== parseInt(this.state.fullsudokuarr[i][j])) {
+        if (
+          parseInt(checkArr[i][j]) !== parseInt(this.state.fullsudokuarr[i][j])
+        ) {
           isWon = false;
           break outerloop;
         }
@@ -325,51 +343,53 @@ export default class SudClassVw extends Component {
           <Col>{this.showgamearr[i].createdtime}</Col>
           <Col>
             <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={this.renderTooltip({ texttoshow: "Load Game" })}
-          >
-            <Button
-              variant="light"
-               onClick={() => {
-                this.loadSelGame(i);
-                this.handleClose();
-              }}
+              placement="right"
+              delay={{ show: 250, hide: 400 }}
+              overlay={this.renderTooltip({ texttoshow: "Load Game" })}
             >
-             <img src={clloadico} />
-            </Button></OverlayTrigger>
+              <Button
+                variant="light"
+                onClick={() => {
+                  this.loadSelGame(i);
+                  this.handleClose();
+                }}
+              >
+                <img src={clloadico} />
+              </Button>
+            </OverlayTrigger>
           </Col>
 
-         <Col>
-         <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={this.renderTooltip({ texttoshow: "Share GameID" })}
-          >
-            <Button
-              variant="light"
-              onClick={() => {
-                navigator.clipboard.writeText(this.showgamearr[i].id);
-                alert("GameID copied to clipboard. Share with a friend.")
-                this.handleClose();
-              }}
+          <Col>
+            <OverlayTrigger
+              placement="right"
+              delay={{ show: 250, hide: 400 }}
+              overlay={this.renderTooltip({ texttoshow: "Share GameID" })}
             >
-              <img src={shareico} />
-            </Button>
-          </OverlayTrigger>
-         </Col>     
+              <Button
+                variant="light"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    this.urlfirst + "?gameid=" + this.showgamearr[i].id
+                  );
+                  alert("GameID copied to clipboard. Share with a friend.");
+                  this.handleClose();
+                }}
+              >
+                <img src={shareico} />
+              </Button>
+            </OverlayTrigger>
+          </Col>
 
           <Col>
             <Button
               variant="light"
-             
               onClick={() => {
                 //alert("Game id is "+ this.showgamearr[i].id);
                 this.delSelGame(this.showgamearr[i].id);
                 this.handleClose();
               }}
             >
-               <img src={deleteico} />
+              <img src={deleteico} />
             </Button>{" "}
           </Col>
         </Row>
@@ -385,36 +405,36 @@ export default class SudClassVw extends Component {
   showGame = () => {
     //show all games for this user
     if (localStorage.getItem("loginstate")) {
-    this.showgamearr = "";
-    this.gameService.showAllGames().then((res) => {
-      //console.log("res for showgames is " + JSON.stringify(res));
-      if (res) {
-        console.log("length of res is " + res.length);
-        this.showgamearr = res;
-        console.log(
-          "ID - " +
-            this.showgamearr[0].id +
-            " Created on " +
-            this.showgamearr[0].createdtime
-        );
-        this.setState({ showLoadMenu: true });
-      }
-    });
-  } else {
-    alert("Have to login to save");
-  }
+      this.showgamearr = "";
+      this.gameService.showAllGames().then((res) => {
+        //console.log("res for showgames is " + JSON.stringify(res));
+        if (res) {
+          console.log("length of res is " + res.length);
+          this.showgamearr = res;
+          console.log(
+            "ID - " +
+              this.showgamearr[0].id +
+              " Created on " +
+              this.showgamearr[0].createdtime
+          );
+          this.setState({ showLoadMenu: true });
+        }
+      });
+    } else {
+      alert("Have to login to save");
+    }
   };
 
   multiStart = () => {
     if (localStorage.getItem("loginstate")) {
-    var loginService = new loginsrvc();
-    loginService.startMultiGame().then((data)=>{
-      console.log("rcvd res"+ JSON.stringify(data));
-    })
-  } else {
-    alert("Have to login to save");
-  }
-  }//end of multistart
+      var loginService = new loginsrvc();
+      loginService.startMultiGame().then((data) => {
+        console.log("rcvd res" + JSON.stringify(data));
+      });
+    } else {
+      alert("Have to login to save");
+    }
+  }; //end of multistart
 
   loadSelGame = (i) => {
     var sudoarr2d = this.process2darr(this.showgamearr[i].gstate);
@@ -431,30 +451,28 @@ export default class SudClassVw extends Component {
   };
 
   delSelGame = (i) => {
-     //alert("passing along "+i);
-    this.gameService.delGame(i).then((res)=>{
-
-    });//end of gameservice
-  };//end of delselgame
+    //alert("passing along "+i);
+    this.gameService.delGame(i).then((res) => {}); //end of gameservice
+  }; //end of delselgame
 
   loadgame = (gameid) => {
     if (localStorage.getItem("loginstate")) {
-    this.gameService.loadgame(gameid).then((res) => {
-      //console.log("gstate is " + this.process2darr(res[0].gstate));
-      var sudoarr2d = this.process2darr(res[0].gstate);
-      var harr2d = this.process2darr(res[0].hstate);
-      var carr2d = this.process2darr(res[0].cstate);
+      this.gameService.loadgame(gameid).then((res) => {
+        //console.log("gstate is " + this.process2darr(res[0].gstate));
+        var sudoarr2d = this.process2darr(res[0].gstate);
+        var harr2d = this.process2darr(res[0].hstate);
+        var carr2d = this.process2darr(res[0].cstate);
 
-      this.setState({
-        sudoarr: sudoarr2d,
-        gameid: res[0].id,
-        hidsudoarr: harr2d,
-        fullsudokuarr: carr2d,
-      });
-    }); //end of game service
-  } else {
-    alert("Have to login to save");
-  }
+        this.setState({
+          sudoarr: sudoarr2d,
+          gameid: res[0].id,
+          hidsudoarr: harr2d,
+          fullsudokuarr: carr2d,
+        });
+      }); //end of game service
+    } else {
+      alert("Have to login to save");
+    }
   }; //load new game
 
   process2darr(valstr) {
@@ -686,21 +704,20 @@ export default class SudClassVw extends Component {
         </div>
 
         <div className="downbtnrow container-fluid">
-
-        <OverlayTrigger
+          <OverlayTrigger
             placement="right"
             delay={{ show: 250, hide: 400 }}
             overlay={this.renderTooltip({ texttoshow: "reset gane" })}
           >
-          <Button
-            variant="light"
-            className="menubtn1"
-            onClick={() => {
-              this.resetGrid1();
-            }}
-          >
-           <img src={restartico} />
-          </Button>
+            <Button
+              variant="light"
+              className="menubtn1"
+              onClick={() => {
+                this.resetGrid1();
+              }}
+            >
+              <img src={restartico} />
+            </Button>
           </OverlayTrigger>
           <Button
             variant="light"
@@ -718,15 +735,15 @@ export default class SudClassVw extends Component {
             delay={{ show: 250, hide: 400 }}
             overlay={this.renderTooltip({ texttoshow: "check entries" })}
           >
-          <Button
-            variant="light"
-            className="menubtn1"
-            onClick={() => {
-              this.checkGrid();
-            }}
-          >
-             <img src={doneico} />
-          </Button>
+            <Button
+              variant="light"
+              className="menubtn1"
+              onClick={() => {
+                this.checkGrid();
+              }}
+            >
+              <img src={doneico} />
+            </Button>
           </OverlayTrigger>
           <Button
             variant="light"
@@ -780,7 +797,7 @@ export default class SudClassVw extends Component {
             <Button
               variant="light"
               className="menubtn1"
-             // disabled={this.state.showsave}
+              // disabled={this.state.showsave}
               onClick={() => {
                 this.showGame();
               }}
@@ -797,7 +814,6 @@ export default class SudClassVw extends Component {
             <Button
               variant="light"
               className="menubtn1"
-              
               onClick={() => {
                 this.multiStart();
               }}
@@ -806,7 +822,25 @@ export default class SudClassVw extends Component {
             </Button>
           </OverlayTrigger>
 
-
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "share game link" })}
+          >
+            <Button
+              variant="light"
+              className="menubtn1"
+              onClick={() => {
+                this.saveGame();
+                navigator.clipboard.writeText(
+                  this.urlfirst + "?gameid=" + this.state.gameid
+                );
+                alert("GameID copied to clipboard. Share with a friend.");
+              }}
+            >
+              <img src={shareico} />
+            </Button>
+          </OverlayTrigger>
         </div>
 
         <Modal
@@ -923,6 +957,7 @@ export default class SudClassVw extends Component {
                   </Button>
                 </div>
               </Row>
+
               <Row className="justify-content-md-center">
                 <div className="renderSq">
                   <Button

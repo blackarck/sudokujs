@@ -4,20 +4,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
 export default class gamesrvc {
-
   //socket=io("https://localhost:3000/");
   constructor() {
-  console.log("Initialize game service "+ process.env.CALLURL);
+    console.log("Initialize game service " + process.env.CALLURL);
 
-  /*
+    /*
     this.socket.on('handshake',()=>{
     console.log("Handshake from server");
    });
 */
-   console.log("Post handshake");
-
+    console.log("Post handshake");
   }
 
   getUserIDToken() {
@@ -46,7 +43,10 @@ export default class gamesrvc {
           body: JSON.stringify(datatosend),
         };
 
-        fetch(process.env.REACT_APP_CALLURL+"/api/user/savegame", requestOptions)
+        fetch(
+          process.env.REACT_APP_CALLURL + "/api/user/savegame",
+          requestOptions
+        )
           .then((data) => data.json())
           .then((result) => {
             //console.log("res is " + JSON.stringify(result));
@@ -74,7 +74,10 @@ export default class gamesrvc {
           body: JSON.stringify({ gid: gameid }),
         };
 
-        fetch(process.env.REACT_APP_CALLURL+"/api/user/loadgame", requestOptions)
+        fetch(
+          process.env.REACT_APP_CALLURL + "/api/user/loadgame",
+          requestOptions
+        )
           .then((data) => data.json())
           .then((result) => {
             // console.log("loaded game is " + JSON.stringify(result));
@@ -82,6 +85,31 @@ export default class gamesrvc {
           });
       }); //end of promise
     }); //end of getuseridtoken
+  }; //end of fetch result
+
+  loadgameID = async (gameid) => {
+    return new Promise((resolve, reject) => {
+      // console.log("gameid is "+gameid);
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT",
+        },
+        body: JSON.stringify({ gid: gameid }),
+      };
+
+      fetch(
+        process.env.REACT_APP_CALLURL + "/api/user/loadgameid",
+        requestOptions
+      )
+        .then((data) => data.json())
+        .then((result) => {
+          // console.log("loaded game is " + JSON.stringify(result));
+          resolve(result);
+        });
+    }); //end of promise
   }; //end of fetch result
 
   delGame = async (gameid) => {
@@ -96,17 +124,20 @@ export default class gamesrvc {
             "Access-Control-Allow-Methods": "GET, POST, PUT",
             authorization: restoken,
           },
-          body: JSON.stringify( { gid: gameid }),
+          body: JSON.stringify({ gid: gameid }),
         };
-        fetch(process.env.REACT_APP_CALLURL+"/api/user/delgame", requestOptions)
-        .then((data) => data.json())
-        .then((result) => {
-          // console.log("loaded game is " + JSON.stringify(result));
-          resolve(result);
-        });
-      });//end of getuseridtoken
-    });//end of promise
-  }//end of delgame
+        fetch(
+          process.env.REACT_APP_CALLURL + "/api/user/delgame",
+          requestOptions
+        )
+          .then((data) => data.json())
+          .then((result) => {
+            // console.log("loaded game is " + JSON.stringify(result));
+            resolve(result);
+          });
+      }); //end of getuseridtoken
+    }); //end of promise
+  }; //end of delgame
 
   showAllGames = async () => {
     return new Promise((resolve, reject) => {
@@ -122,7 +153,10 @@ export default class gamesrvc {
           },
         };
 
-        fetch(process.env.REACT_APP_CALLURL+"/api/user/showgames", requestOptions)
+        fetch(
+          process.env.REACT_APP_CALLURL + "/api/user/showgames",
+          requestOptions
+        )
           .then((data) => data.json())
           .then((result) => {
             //console.log("loaded game is " + JSON.stringify(result));
@@ -132,7 +166,5 @@ export default class gamesrvc {
     }); //end of promise
   }; //end of showallgames
 
-  sendSocketMsg(){
-
-  }
+  sendSocketMsg() {}
 } // end of gamesrvc class
