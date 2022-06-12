@@ -831,7 +831,10 @@ export default class SudClassVw extends Component {
               variant="light"
               className="menubtn1"
               onClick={() => {
-                this.saveGame();
+                if (!this.state.gameid) {
+                  console.log("Game id doesn't exists " + this.state.gameid);
+                  this.saveGame();
+                }
                 navigator.clipboard.writeText(
                   this.urlfirst + "?gameid=" + this.state.gameid
                 );
