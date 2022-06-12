@@ -334,6 +334,28 @@ export default class SudClassVw extends Component {
     //save the game
   };
 
+  saveGameforShare = () => {
+    if (localStorage.getItem("loginstate")) {
+      console.log("User logged in moving forward");
+      //parms to pass
+      // currentstate - this.state.sudoarr
+      // completestate - sudokuarr
+      // hiddenstate - hiddenSudokuarr
+      let gamedata = {
+        currentstate: this.state.sudoarr,
+        completestate: this.state.fullsudokuarr,
+        //hiddenstate: hiddenSudokuclone,
+        hiddenstate: this.state.hidsudoarr,
+        gameid: this.state.gameid,
+      };
+      this.gameService.savegameforShare(gamedata).then((res) => {
+        console.log("Game saved " + JSON.stringify(res));
+        // this.loadgame(this.state.gameid);
+      });
+    } else {
+      alert("Have to login to save");
+    }
+  }; //end of saveGameforShare
   getShowGames = () => {
     let rowsarr = [];
     for (let i = 0; i < this.showgamearr.length; i++) {
@@ -833,7 +855,7 @@ export default class SudClassVw extends Component {
               onClick={() => {
                 if (!this.state.gameid) {
                   console.log("Game id doesn't exists " + this.state.gameid);
-                  this.saveGame();
+                  this.saveGameforShare();
                 }
                 navigator.clipboard.writeText(
                   this.urlfirst + "?gameid=" + this.state.gameid
