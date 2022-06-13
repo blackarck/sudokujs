@@ -74,7 +74,7 @@ export default class SudClassVw extends Component {
     const paramgameid = params.get("gameid");
 
     if (paramgameid) {
-      // alert("gameid is " + paramgameid);
+      alert("gameid is " + paramgameid);
       this.gameService.loadgameID(paramgameid).then((res) => {
         //console.log("Response of loadgameid is " + res[0].gstate);
 
@@ -334,9 +334,10 @@ export default class SudClassVw extends Component {
     //save the game
   };
 
-  saveGameforShare = () => {
+  saveGameforShare = async() => {
+    return new Promise((resolve, reject) => {
     if (localStorage.getItem("loginstate")) {
-      console.log("User logged in moving forward");
+      
       //parms to pass
       // currentstate - this.state.sudoarr
       // completestate - sudokuarr
@@ -351,11 +352,14 @@ export default class SudClassVw extends Component {
       this.gameService.savegameforShare(gamedata).then((res) => {
         console.log("Game saved " + JSON.stringify(res));
         // this.loadgame(this.state.gameid);
+        resolve(res);
       });
     } else {
       alert("Have to login to save");
     }
+  });
   }; //end of saveGameforShare
+
   getShowGames = () => {
     let rowsarr = [];
     for (let i = 0; i < this.showgamearr.length; i++) {
@@ -853,14 +857,24 @@ export default class SudClassVw extends Component {
               variant="light"
               className="menubtn1"
               onClick={() => {
+                var gameidtoshare;
                 if (!this.state.gameid) {
                   console.log("Game id doesn't exists " + this.state.gameid);
-                  this.saveGameforShare();
+                  this.saveGameforShare().then((res)=>{
+                    console.log("res is "+ res);
+                    navigator.clipboard.writeText(
+                      this.urlfirst + "?gameid=" + res.uuidin
+                    );
+                  });
+                }else{
+                  gameidtoshare=this.state.gameid;
+                  navigator.clipboard.writeText(
+                    this.urlfirst + "?gameid=" + this.state.gameid
+                  );
+                  alert("GameID copied to clipboard. Share with a friend.");
                 }
-                navigator.clipboard.writeText(
-                  this.urlfirst + "?gameid=" + this.state.gameid
-                );
-                alert("GameID copied to clipboard. Share with a friend.");
+               
+                
               }}
             >
               <img src={shareico} />
