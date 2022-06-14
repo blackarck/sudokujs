@@ -1,0 +1,16 @@
+//line 835 code for multiplayer sudokuclassview
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={this.renderTooltip({ texttoshow: "start multiplayer" })}
+          >
+            <Button
+              variant="light"
+              className="menubtn1"
+              onClick={() => {
+                this.multiStart();
+              }}
+            >
+              <img src={multiplayer} />
+            </Button>
+          </OverlayTrigger>

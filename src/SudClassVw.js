@@ -74,7 +74,7 @@ export default class SudClassVw extends Component {
     const paramgameid = params.get("gameid");
 
     if (paramgameid) {
-      alert("gameid is " + paramgameid);
+      // alert("gameid is " + paramgameid);
       this.gameService.loadgameID(paramgameid).then((res) => {
         //console.log("Response of loadgameid is " + res[0].gstate);
 
@@ -336,8 +336,7 @@ export default class SudClassVw extends Component {
 
   saveGameforShare = async() => {
     return new Promise((resolve, reject) => {
-    if (localStorage.getItem("loginstate")) {
-      
+  
       //parms to pass
       // currentstate - this.state.sudoarr
       // completestate - sudokuarr
@@ -350,13 +349,11 @@ export default class SudClassVw extends Component {
         gameid: this.state.gameid,
       };
       this.gameService.savegameforShare(gamedata).then((res) => {
-        console.log("Game saved " + JSON.stringify(res));
+        //console.log("Game saved " + JSON.stringify(res));
         // this.loadgame(this.state.gameid);
         resolve(res);
       });
-    } else {
-      alert("Have to login to save");
-    }
+  
   });
   }; //end of saveGameforShare
 
@@ -832,21 +829,7 @@ export default class SudClassVw extends Component {
             </Button>
           </OverlayTrigger>
 
-          <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={this.renderTooltip({ texttoshow: "start multiplayer" })}
-          >
-            <Button
-              variant="light"
-              className="menubtn1"
-              onClick={() => {
-                this.multiStart();
-              }}
-            >
-              <img src={multiplayer} />
-            </Button>
-          </OverlayTrigger>
+
 
           <OverlayTrigger
             placement="right"
@@ -861,7 +844,7 @@ export default class SudClassVw extends Component {
                 if (!this.state.gameid) {
                   console.log("Game id doesn't exists " + this.state.gameid);
                   this.saveGameforShare().then((res)=>{
-                    console.log("res is "+ res);
+                    //console.log("res is "+ res);
                     navigator.clipboard.writeText(
                       this.urlfirst + "?gameid=" + res.uuidin
                     );
@@ -1067,6 +1050,10 @@ export default class SudClassVw extends Component {
               <p>Will solve the puzzle</p>
               <h4>Save</h4>
               <p>Will save the game, if logged in</p>
+              <h4>Load Game</h4>
+              <p>Load from list of saved games, if logged in</p>
+              <h4>Share</h4>
+              <p>Will create a sharable link for current game</p>
             </div>
           </Modal.Body>
         </Modal>

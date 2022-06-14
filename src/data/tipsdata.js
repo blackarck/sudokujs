@@ -10,7 +10,7 @@ var tipsdata = [
   },
   {
     tipnum: "3",
-    tip: "Multiplater competitive game is available",
+    tip: "Current game can be shared with a friend using sharable link",
   },
   {
     tipnum: "4",
@@ -22,8 +22,12 @@ var tipsdata = [
   },
   {
     tipnum: "6",
-    tip: "Game state can be saved",
+    tip: "Game state can be saved, you should be logged in",
   },
+  {
+    tipnum: "7",
+    tip: "Game state can be loaded, you should be logged in",
+  }
 ];
 
 export default tipsdata;

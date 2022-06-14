@@ -85,9 +85,7 @@ export default class gamesrvc {
           .then((data) => data.json())
           .then((result) => {
             //console.log("res is " + JSON.stringify(result));
-            if (result.savegame) {
-              alert("Game saved !");
-            }
+            
             resolve(result);
           });
       }); //end of promise

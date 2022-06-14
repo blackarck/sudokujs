@@ -89,8 +89,12 @@ export default class About extends Component {
                 <td>nodejs server with mysql DB</td>
               </tr>
               <tr>
-                <td>Hosting</td>
+                <td>Hosting for front end</td>
                 <td>Firebase</td>
+              </tr>
+              <tr>
+                <td>Hosting for back end</td>
+                <td>AWS Server</td>
               </tr>
               <tr>
                 <td>Developer</td>
@@ -139,6 +143,8 @@ export default class About extends Component {
             don't show menu.
           </p>
           <p>Mobile friendly, no menu and smaller blocks so fits vertically</p>
+          <p>Added options to save game state and load it, for this login is required, so added functionality for google login</p>
+          <p>Added option to share game with a friend, there is a button which will generate a link in clipboard, this sharable link will create same game for user</p>
         </Container>
       </main>
     );
