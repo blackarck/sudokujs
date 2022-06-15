@@ -6,9 +6,16 @@ dotenv.config();
 
 export default class gamesrvc {
   //socket=io("https://localhost:3000/");
+  callurl="";
   constructor() {
     console.log("Initialize game service " + process.env.CALLURL);
-
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      // development build code
+      this.callurl =  process.env.REACT_APP_CALLURL;
+  } else {
+      // production build code
+      this.callurl =  process.env.REACT_APP_CALLURLPROD;
+  }
     /*
     this.socket.on('handshake',()=>{
     console.log("Handshake from server");
@@ -44,7 +51,7 @@ export default class gamesrvc {
         };
 
         fetch(
-          process.env.REACT_APP_CALLURL + "/api/user/savegame",
+          this.callurl  + "/api/user/savegame",
           requestOptions
         )
           .then((data) => data.json())
@@ -79,7 +86,7 @@ export default class gamesrvc {
         };
 
         fetch(
-          process.env.REACT_APP_CALLURL + "/api/user/savegameshare",
+          this.callurl  + "/api/user/savegameshare",
           requestOptions
         )
           .then((data) => data.json())
@@ -109,7 +116,7 @@ export default class gamesrvc {
         };
 
         fetch(
-          process.env.REACT_APP_CALLURL + "/api/user/loadgame",
+          this.callurl  + "/api/user/loadgame",
           requestOptions
         )
           .then((data) => data.json())
@@ -135,7 +142,7 @@ export default class gamesrvc {
       };
 
       fetch(
-        process.env.REACT_APP_CALLURL + "/api/user/loadgameid",
+        this.callurl  + "/api/user/loadgameid",
         requestOptions
       )
         .then((data) => data.json())
@@ -161,7 +168,7 @@ export default class gamesrvc {
           body: JSON.stringify({ gid: gameid }),
         };
         fetch(
-          process.env.REACT_APP_CALLURL + "/api/user/delgame",
+          this.callurl  + "/api/user/delgame",
           requestOptions
         )
           .then((data) => data.json())
@@ -188,7 +195,7 @@ export default class gamesrvc {
         };
 
         fetch(
-          process.env.REACT_APP_CALLURL + "/api/user/showgames",
+          this.callurl  + "/api/user/showgames",
           requestOptions
         )
           .then((data) => data.json())

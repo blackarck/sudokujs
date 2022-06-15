@@ -41,8 +41,9 @@ export default class SudClassVw extends Component {
   islogin = false;
   gameService = new gamesrvc();
   showgamearr = [];
+  //this is the front end host environment
   urlfirst = "http://localhost:4200/";
-
+  urlself = "http://localhost:4200/";
   constructor(props) {
     super(props);
     fillsudokuarr();
@@ -67,11 +68,24 @@ export default class SudClassVw extends Component {
       gameid: "",
       showMultibtn: localStorage.getItem("loginstate"),
       gameStarted: true,
+      
     };
 
     const search = window.location.search;
     const params = new URLSearchParams(search);
     const paramgameid = params.get("gameid");
+
+    // console.log("Environment is " + process.env.NODE_ENV);
+    
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      // development build code
+      this.urlfirst = "http://localhost:4200/";
+      this.urlself = "http://localhost:4200/";
+  } else {
+      // production build code
+      this.urlfirst = "https://sudokuapi.ioblitz.com/";
+      this.urlself = "https://sudoku.ioblitz.com/";
+  }
 
     if (paramgameid) {
       // alert("gameid is " + paramgameid);
@@ -846,13 +860,13 @@ export default class SudClassVw extends Component {
                   this.saveGameforShare().then((res)=>{
                     //console.log("res is "+ res);
                     navigator.clipboard.writeText(
-                      this.urlfirst + "?gameid=" + res.uuidin
+                      this.urlself + "?gameid=" + res.uuidin
                     );
                   });
                 }else{
                   gameidtoshare=this.state.gameid;
                   navigator.clipboard.writeText(
-                    this.urlfirst + "?gameid=" + this.state.gameid
+                    this.urlself + "?gameid=" + this.state.gameid
                   );
                   alert("GameID copied to clipboard. Share with a friend.");
                 }
