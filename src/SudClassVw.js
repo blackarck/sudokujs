@@ -68,7 +68,6 @@ export default class SudClassVw extends Component {
       gameid: "",
       showMultibtn: localStorage.getItem("loginstate"),
       gameStarted: true,
-      
     };
 
     const search = window.location.search;
@@ -76,16 +75,16 @@ export default class SudClassVw extends Component {
     const paramgameid = params.get("gameid");
 
     // console.log("Environment is " + process.env.NODE_ENV);
-    
-    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
       // development build code
       this.urlfirst = "http://localhost:4200/";
       this.urlself = "http://localhost:4200/";
-  } else {
+    } else {
       // production build code
       this.urlfirst = "https://sudokuapi.ioblitz.com/";
       this.urlself = "https://sudoku.ioblitz.com/";
-  }
+    }
 
     if (paramgameid) {
       // alert("gameid is " + paramgameid);
@@ -348,9 +347,8 @@ export default class SudClassVw extends Component {
     //save the game
   };
 
-  saveGameforShare = async() => {
+  saveGameforShare = async () => {
     return new Promise((resolve, reject) => {
-  
       //parms to pass
       // currentstate - this.state.sudoarr
       // completestate - sudokuarr
@@ -367,8 +365,7 @@ export default class SudClassVw extends Component {
         // this.loadgame(this.state.gameid);
         resolve(res);
       });
-  
-  });
+    });
   }; //end of saveGameforShare
 
   getShowGames = () => {
@@ -843,8 +840,6 @@ export default class SudClassVw extends Component {
             </Button>
           </OverlayTrigger>
 
-
-
           <OverlayTrigger
             placement="right"
             delay={{ show: 250, hide: 400 }}
@@ -857,21 +852,21 @@ export default class SudClassVw extends Component {
                 var gameidtoshare;
                 if (!this.state.gameid) {
                   console.log("Game id doesn't exists " + this.state.gameid);
-                  this.saveGameforShare().then((res)=>{
+                  this.saveGameforShare().then((res) => {
                     //console.log("res is "+ res);
                     navigator.clipboard.writeText(
                       this.urlself + "?gameid=" + res.uuidin
                     );
                   });
-                }else{
-                  gameidtoshare=this.state.gameid;
-                  navigator.clipboard.writeText(
-                    this.urlself + "?gameid=" + this.state.gameid
-                  );
-                  alert("GameID copied to clipboard. Share with a friend.");
+                } else {
+                  gameidtoshare = this.state.gameid;
+                  navigator.clipboard
+                    .writeText(this.urlself + "?gameid=" + this.state.gameid)
+                    .then(() => {
+                      alert("GameID copied to clipboard.");
+                    });
+                  alert("Game ID copied");
                 }
-               
-                
               }}
             >
               <img src={shareico} />

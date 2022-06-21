@@ -2,21 +2,30 @@ import usermodel from "./data/user";
 import firebase from "firebase/app";
 import dotenv from "dotenv";
 
-
-
-
 export default class loginsrvc {
   userdata;
   isloggedin = false;
+  callurl = "";
 
   constructor() {
-    //console.log(require("dotenv").config())
+    console.log(
+      "Stating loginservice constructor " + process.env.REACT_APP_CALLURLDEV
+    );
     dotenv.config();
 
     this.userdata = new usermodel();
-    if( localStorage.getItem("userdata")) {
-      this.userdata=localStorage.getItem("userdata");
+    if (localStorage.getItem("userdata")) {
+      this.userdata = localStorage.getItem("userdata");
       this.isloggedin = true;
+    }
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+      // development build code
+      console.log("Dev build");
+      this.callurl = process.env.REACT_APP_CALLURLDEV;
+    } else {
+      // production build code
+      console.log("prod build");
+      this.callurl = process.env.REACT_APP_CALLURLPROD;
     }
   }
 
@@ -94,9 +103,9 @@ export default class loginsrvc {
           },
           body: JSON.stringify(userdata),
         };
-        console.log("Calling url "+ JSON.stringify(process.env));
+        console.log("Calling url " + this.callurl);
 
-        fetch(process.env.REACT_APP_CALLURL+"/api/user/login", requestOptions)
+        fetch(this.callurl + "/api/user/login", requestOptions)
           .then((data) => data.json())
           .then((result) => {
             // console.log(
@@ -126,10 +135,9 @@ export default class loginsrvc {
     }); //end of promise
   };
 
-  startMultiGame = async() => {
+  startMultiGame = async () => {
     return new Promise((resolve, reject) => {
       this.getUserIDToken()?.then((restoken) => {
-
         const requestOptions = {
           method: "POST",
           headers: {
@@ -140,15 +148,12 @@ export default class loginsrvc {
           },
           // body: JSON.stringify({"data":"This is payload"}),
         };
-        fetch(process.env.REACT_APP_CALLURL+"/api/multigm/startmulti", requestOptions)
-        .then((data) => data.json())
-        .then((result) => {
-          resolve(result);
-        });
-      });//end of getuseridtoken
-
-    });//end of promise
-  }
-
+        fetch(this.callurl + "/api/multigm/startmulti", requestOptions)
+          .then((data) => data.json())
+          .then((result) => {
+            resolve(result);
+          });
+      }); //end of getuseridtoken
+    }); //end of promise
+  };
 } //end of loginsrvc class
-
